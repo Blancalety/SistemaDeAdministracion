@@ -1,0 +1,29 @@
+tiempo suficiente a planear la base de datos.
+
+empleados
+------------------
+id int autoincrement llave_primaria ids no se repiten
+nombre varchar 128
+apellidos varchar 128
+user
+correo varchar 128 mejor usar el correo como nombre de usuario
+pass varchar 32
+rol int 1 del 0 al 9 osea 10 roles maximo
+archivo_n varchar 255
+archivo_f varchar 128
+status int 1 default //1=activo 0=inactivo.
+eliminado int 0 default //bandera para indicar si esta borrado=1 no borrado=0
+
+adiminstrar las distintas tablas de la bd que estan incluidas en mi proyecto.
+
+gestor de contenido de bd. php my admin
+modulo para administrar mis empleados.
+
+
+UPDATE empleados
+SET eliminado = 0
+WHERE eliminado = 1;
+
+
+DELETE FROM empleados 
+WHERE id = 1

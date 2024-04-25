@@ -1,0 +1,3 @@
+onblur debe validar si el correo existe o no existe, mediante ajax
+no dejar que salve una vez que ya avisa que el correo ya existe
+desabilitar el correo o 
