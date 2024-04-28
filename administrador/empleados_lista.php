@@ -59,6 +59,10 @@
             margin-left: 20rem;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         .link {
             color: black;
             font-family: Arial, sans-serif;
@@ -74,6 +78,7 @@
 
         .detalles {
             background: rgb(200, 160, 255);
+            text-decoration: none;
         }
 
         .editar {
@@ -89,6 +94,7 @@
             padding: 5px 10px;
             margin: 0 5px;
             cursor: pointer;
+            text-decoration: none;
         }
 
         .mensaje {
@@ -111,13 +117,14 @@
             width: 250px;
             margin: 10px;
             border-radius: 5px;
+            font-family: Arial, sans-serif;
         }
         
     </style>
 
 <script>
 
-function usarAjax() {
+function botonEliminar() {
     $(".eliminar a").on("click", function(e) {
         e.preventDefault(); // Evita el comportamiento por defecto del enlace
 
@@ -153,8 +160,55 @@ function usarAjax() {
     });
 }
 
+function botonDetalles() {
+    $(".detalles a").on("click", function(e) {
+        e.preventDefault(); // Evita el comportamiento por defecto del enlace
+        
+        var numero_id = $(this).data("id");
+        $.ajax({
+            url: 'empleados_detalle.php', 
+            type: 'post',
+            dataType: 'json',
+            data: { id: numero_id }, // Envío el ID del registro
+            success: function(response) {
+                //console.log(response);
+                if (response.success) {
+                    
+                    $("#notification").html("Mostrando los datos...").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    // Redirige después de x segundos
+                    setTimeout(function() {
+                        var empleado = response.empleado;
+                        var url = 'muestra_detalles.php?nombre=' + empleado.nombre + '&apellidos=' + empleado.apellidos + 
+                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&status=' + empleado.status;
+                        window.location.href = url; // Redireccionar a la página con datos del empleado en URL
+                        //window.location.href = "empleados_alta.php";
+                    }, 300);
+                }, 400);
+
+
+                } else {
+                    $("#notification").html("Error al ver detalles").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    }, 3000);
+                }
+            },
+            error: function() {
+                $("#mensaje").html("Error al conectar").show();
+                    setTimeout(function() {
+                        $("#mensaje").html("").hide();
+                    }, 3000);
+            }
+        });
+        
+    });
+}
+
 $(document).ready(function() {
-    usarAjax();
+    botonEliminar();
+    botonDetalles();
 });
 
 </script>
@@ -177,7 +231,7 @@ $(document).ready(function() {
     ];
 
     $opciones = [
-        1 => 'Ver detalles',
+        1 => 'Ver detalle',
         2 => 'Editar',
         3 => 'Eliminar',
     ];
@@ -188,46 +242,48 @@ $(document).ready(function() {
     <a href="empleados_alta.php" class="link boton">Agregar nuevo registro</a><br><br>
     <div class="table">
 
-    <!-- Fila Header -->
-    <div class="fila header">
-        <div class="celda">ID</div>
-        <div class="celda">Nombre</div>
-        <div class="celda">Apellidos</div>
-        <div class="celda">Correo</div>
-        <div class="celda">Rol</div>
-        <div class="celda">Opciones</div>
-    </div>
-
-    <?php
-    while ($fila = $res->fetch_array()) {
-        $id = $fila["id"];
-        $nombre = $fila["nombre"];
-        $apellidos = $fila["apellidos"];
-        $correo = $fila["correo"];
-        $rol = $fila["rol"];
-        $nombreRol = isset($roles[$rol]) ? $roles[$rol] : 'Desconocido';
-        ?>
-
-        <!-- Fila Contenido -->
-        <div class="fila">
-            <div class="celda"><?php echo $id; ?></div>
-            <div class="celda"><?php echo $nombre; ?></div>
-            <div class="celda"><?php echo $apellidos; ?></div>
-            <div class="celda"><?php echo $correo; ?></div>
-            <div class="celda"><?php echo $nombreRol; ?></div>
-            <div class="celda">
-                <span class="detalles"><?php echo $opciones[1]; ?></span>
-                <span class="editar"><?php echo $opciones[2]; ?></span>
-                <span class="eliminar">
-                <a href="#" class='link' data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
-                </span>
-            </div>
+        <!-- Fila Header -->
+        <div class="fila header">
+            <div class="celda">ID</div>
+            <div class="celda">Nombre</div>
+            <div class="celda">Apellidos</div>
+            <div class="celda">Correo</div>
+            <div class="celda">Rol</div>
+            <div class="celda">Opciones</div>
         </div>
-            
-    <?php
-    }
-    ?>
-</div>
+
+        <?php
+        while ($fila = $res->fetch_array()) {
+            $id = $fila["id"];
+            $nombre = $fila["nombre"];
+            $apellidos = $fila["apellidos"];
+            $correo = $fila["correo"];
+            $rol = $fila["rol"];
+            $nombreRol = isset($roles[$rol]) ? $roles[$rol] : 'Desconocido';
+            ?>
+
+            <!-- Fila Contenido -->
+            <div class="fila">
+                <div class="celda"><?php echo $id; ?></div>
+                <div class="celda"><?php echo $nombre; ?></div>
+                <div class="celda"><?php echo $apellidos; ?></div>
+                <div class="celda"><?php echo $correo; ?></div>
+                <div class="celda"><?php echo $nombreRol; ?></div>
+                <div class="celda">
+                    <span class="detalles">
+                        <a href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
+                    </span>
+                    <span class="editar"><?php echo $opciones[2]; ?></span>
+                    <span class="eliminar">
+                        <a href="#" class='link' data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
+                    </span>
+                </div>
+            </div>
+                
+        <?php
+        }
+        ?>
+    </div>
 
 <div id="notification" class="notification"></div>
 <div id="mensaje" class="mensaje"></div>
