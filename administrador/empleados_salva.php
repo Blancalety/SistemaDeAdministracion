@@ -11,7 +11,7 @@ $pass           =   $_REQUEST['pass'];
 $rol            =   $_REQUEST['rol'];
 $archivo_n      =   '';
 $archivo_f      =   '';
-$passEnc = md5($pass);//cadena encriptada de la contrasenia, metodo de encriptacion.
+$passEnc = md5($pass);//cadena encriptada de la contrasenia, metodo de encriptacion md5.
 
 if (isset($_POST['correo'])) {
         $correo = $_POST['correo'];
@@ -28,8 +28,11 @@ if (isset($_POST['correo'])) {
                 $sql = "INSERT INTO empleados
                 (nombre, apellidos, correo, pass, rol, archivo_n, archivo_f)
                 VALUES ('$nombre', '$apellidos', '$correo', '$passEnc', $rol, '$archivo_n', '$archivo_f')";
-                $res = $con->query($sql);
+                echo $res = $con->query($sql);
         }
+
+        // Cierra la conexión a la base de datos
+        $con->close();
     }
 
     header("Location: empleados_lista.php");//redireccionamiento, implementar funcion ajax en lista

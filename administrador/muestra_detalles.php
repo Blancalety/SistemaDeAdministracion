@@ -40,12 +40,12 @@
         }
 
         .fila {
-            display: table-row;
+            display: table-cell;
             background-color: lightgrey;
         }
 
         .celda {
-            display: table-cell;
+            display:flex;
             border: 1px solid #000;
             padding: 10px;
             text-align: center;
@@ -65,11 +65,11 @@
 
         .table {
             display: table;
-            width: 65%;
-            margin-top: 25px;
+            width: 30%;
             font-family: Arial, sans-serif;
             border: 1px solid #000;
-            border-radius: 3px;
+            border-radius: 6px;
+            margin-top: 60px;
             margin-left: auto;  /* Ajusta el margen izquierdo a automático para centrar */
             margin-right: auto;
         }

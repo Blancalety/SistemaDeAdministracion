@@ -17,11 +17,12 @@
             border: 1px solid black;
         }
 
-        .input-salvar {
+        button {
             width: 35%; 
             box-sizing: border-box;
             margin-top: 5px;
-            padding: 7px; 
+            padding: 7px;
+            border-radius: 4px; 
         }
 
         form {
@@ -92,7 +93,7 @@
             font-size: .7em;
         }
 
-        #rol {
+        .rol {
             padding: 3px;
             border-radius: 5px;
             width: 11rem;
@@ -113,24 +114,23 @@
             var correo = $('#correo').val();
             var pass = $('#pass').val();
             var rol = $('#rol').val();
+            //var rol = document.getElementById('rol').value;
 
-            if (nombre == "" || apellidos == "" || correo == "" || pass == ""){
+            if (nombre == "" || apellidos == "" || correo == "" || pass == "" || rol == 0){
              $('#mensaje').html('Faltan campos por llenar').show(); 
              setTimeout(function() {
                  $('#mensaje').html('').hide();
                 }, 5000);;
             }
-            else {
-                document.Forma01.method = 'post';
-                document.Forma01.action = 'empleados_salva.php';
-                document.Forma01.submit();
-            }
+            // else {
+            //     document.Forma01.method = 'post';
+            //     document.Forma01.action = 'empleados_salva.php';
+            //     document.Forma01.submit();
+            // }
         }
-
 
         function sale() {
             var correo = $('#correo').val();
-            
 
             $.ajax({
                 url: 'verificar_correo.php',
@@ -167,7 +167,7 @@
     <div class="titulo">Alta de empleados</div>
     <a href="empleados_lista.php" class="link boton">Regresar al listado</a><br><br>
 
-    <form name="Forma01" action="empleados_salva.php" method="post" autocomplete="off">
+    <form name="Forma01" action="empleados_salva.php" method="post" autocomplete="off" id="form1">
         <input type="text" name="nombre" id="nombre" placeholder="Escribe tu nombre" autocomplete="off"> <br>
         <input type="text" name="apellidos" id="apellidos" placeholder="Escribe tus apellidos" autocomplete="off"> <br>
         <!--<input type="text" name="correo" id="correo" placeholder="Escribe tu correo"> <br>-->
@@ -179,7 +179,10 @@
             <option value="2">Ejecutivo</option>
         </select>
         <br>
-        <input class="input-salvar" onclick="enviaDatos(); return false;" type="submit" value="Salvar">
+        <!-- <input class="input-salvar" onclick="enviaDatos(); return false;" type="submit" value="Salvar"> -->
+        <button id="btnguardar" onclick="enviaDatos(); return false;">
+            Salvar
+        </button>
 
         <div id="mensaje" class="mensaje"></div>
 
@@ -189,6 +192,28 @@
 </body>
 
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnguardar').click(function(){
+            var datos=$('#form1').serialize();
+            $.ajax({
+                type: "POST",
+                url: "empleados_salva.php",
+                data: datos,
+                success:function(r){
+                    if (r == 1){
+                        alert("Fallo el server");
+                    }
+                    else{
+                        window.location.href = "empleados_lista.php";
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
 
 <!--
 validar y eliminar correo con ajax

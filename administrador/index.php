@@ -113,7 +113,7 @@
                 $('#mensaje').html('Faltan campos por llenar').show(); 
                 setTimeout(function() {
                     $('#mensaje').html('').hide();
-                    }, 1000);
+                    }, 2000);
             }
             else {
                 $.ajax({
@@ -130,7 +130,7 @@
                             $('#alerta').html(response.message).show();
                             setTimeout(function() {
                                 $('#alerta').html('').hide();
-                            }, 2000); 
+                            }, 5000); 
                         }
 
                     },
@@ -138,7 +138,7 @@
                         $('#alerta').html('Error!').show();
                         setTimeout(function() {
                             $('#alerta').html('').hide();
-                        }, 2000);
+                        }, 5000);
                     }
                 });
             }

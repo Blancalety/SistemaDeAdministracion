@@ -7,13 +7,12 @@ $con = conecta();
 if(isset($_POST['id'])){
     $id = $_POST['id']; // Captura el ID del empleado
 
-    $sql = "SELECT id, nombre, apellidos, correo, rol, status FROM empleados WHERE id = $id"; // Consulta para obtener los detalles del empleado
+    $sql = "SELECT id, nombre, apellidos, correo, rol, pass, status FROM empleados WHERE id = $id"; // Consulta para obtener los detalles del empleado
 
     $res = $con->query($sql); // Ejecuta la consulta
 
     if ($res->num_rows > 0) { // Verifica si se encontraron resultados
         $empleado = $res->fetch_assoc(); // Obtiene los datos del empleado
-
 
         echo json_encode(['success' => true, 'empleado' => $empleado]); //Devuelve los detalles en formato JSON
     } else {

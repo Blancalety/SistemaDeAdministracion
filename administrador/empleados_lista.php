@@ -76,6 +76,10 @@
             text-decoration: none;
         }
 
+        .designletra {
+            color:#a10684;
+        }
+
         .detalles {
             background: rgb(200, 160, 255);
             text-decoration: none;
@@ -124,50 +128,15 @@
 
 <script>
 
-function botonEliminar() {
-    $(".eliminar a").on("click", function(e) {
-        e.preventDefault(); // Evita el comportamiento por defecto del enlace
-
-        if (confirm("¿Quieres eliminar esta fila?")) {
-            var numero_id = $(this).data("id"); // Obtiene el ID del registro a eliminar
-            $.ajax({
-                url: 'empleados_elimina.php', // Script PHP para eliminar el empleado
-                type: 'post',
-                dataType: 'json',
-                data: { id: numero_id }, // Envía el ID del registro
-                success: function(response) {
-                    if (response.success) {
-                        $('[data-id="' + numero_id + '"]').closest('.fila').hide();
-                        $("#notification").html("Eliminado exitosamente").show();
-                        setTimeout(function() {
-                            $("#notification").html("").hide();
-                        }, 3000);
-                    } else {
-                        $("#notification").html("Error al eliminar el registro").show();
-                        setTimeout(function() {
-                            $("#notification").html("").hide();
-                        }, 3000);
-                    }
-                },
-                error: function() {
-                    $("#mensaje").html("Error al conectar").show();
-                        setTimeout(function() {
-                            $("#mensaje").html("").hide();
-                        }, 3000);
-                }
-            });
-        }
-    });
-}
-
 function botonDetalles() {
     $(".detalles a").on("click", function(e) {
         e.preventDefault(); // Evita el comportamiento por defecto del enlace
         
         var numero_id = $(this).data("id");
+
         $.ajax({
             url: 'empleados_detalle.php', 
-            type: 'post',
+            method: 'POST',
             dataType: 'json',
             data: { id: numero_id }, // Envío el ID del registro
             success: function(response) {
@@ -206,9 +175,91 @@ function botonDetalles() {
     });
 }
 
+function botonEditar() {
+    $(".editar a").on("click", function(e) {
+        e.preventDefault(); // Evita el comportamiento por defecto del enlace
+  
+        var numero_id = $(this).data("id");
+
+        $.ajax({
+            url: 'empleados_detalle.php', 
+            method: 'POST',
+            dataType: 'json',
+            data: {id: numero_id}, // Envío de id, y otras variables
+            success: function(response) {
+                if (response.success) {
+                    //console.log(response.data);// Imprimir los datos en la consola del navegador
+                    $("#notification").html("Cargando edicion...").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    // Redirige después de x segundos
+                    setTimeout(function() {
+                        var empleado = response.empleado;
+                        var url = 'muestra_edicion.php?nombre=' + empleado.nombre + '&id=' + empleado.id + '&apellidos=' + empleado.apellidos + 
+                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&pass=' + empleado.pass;
+                        window.location.href = url; // Redireccionar a la página con datos del empleado en URL
+                    }, 300);
+                }, 400);
+
+
+                } else {
+                    //console.log(response.data);// Imprimir los datos en la consola del navegador
+                    $("#notification").html("Error al ver edicion").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    }, 3000);
+                }
+            },
+            error: function() {
+                $("#mensaje").html("Error al conectar").show();
+                    setTimeout(function() {
+                        $("#mensaje").html("").hide();
+                    }, 3000);
+            }
+        });     
+    });
+}
+
+function botonEliminar() {
+    $(".eliminar a").on("click", function(e) {
+        e.preventDefault(); // Evita el comportamiento por defecto del enlace
+
+        if (confirm("¿Quieres eliminar esta fila?")) {
+            var numero_id = $(this).data("id"); // Obtiene el ID del registro a eliminar
+            $.ajax({
+                url: 'empleados_elimina.php', // Script PHP para eliminar el empleado
+                method: 'POST',
+                dataType: 'json',
+                data: { id: numero_id }, // Envía el ID del registro
+                success: function(response) {
+                    if (response.success) {
+                        $('[data-id="' + numero_id + '"]').closest('.fila').hide();
+                        $("#notification").html("Eliminado exitosamente").show();
+                        setTimeout(function() {
+                            $("#notification").html("").hide();
+                        }, 3000);
+                    } else {
+                        $("#notification").html("Error al eliminar el registro").show();
+                        setTimeout(function() {
+                            $("#notification").html("").hide();
+                        }, 3000);
+                    }
+                },
+                error: function() {
+                    $("#mensaje").html("Error al conectar").show();
+                        setTimeout(function() {
+                            $("#mensaje").html("").hide();
+                        }, 3000);
+                }
+            });
+        }
+    });
+}
+
 $(document).ready(function() {
-    botonEliminar();
     botonDetalles();
+    botonEditar();
+    botonEliminar();
 });
 
 </script>
@@ -271,9 +322,13 @@ $(document).ready(function() {
                 <div class="celda"><?php echo $nombreRol; ?></div>
                 <div class="celda">
                     <span class="detalles">
-                        <a href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
+                        <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
                     </span>
-                    <span class="editar"><?php echo $opciones[2]; ?></span>
+
+                    <span class="editar">
+                        <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[2]; ?></a>
+                    </span>
+
                     <span class="eliminar">
                         <a href="#" class='link' data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
                     </span>
