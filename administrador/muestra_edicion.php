@@ -121,27 +121,51 @@
     
     <script>
         //js
-        function enviaDatos() {
-            var nombre = $('#nombre').val();
-            var apellidos = $('#apellidos').val();
-            var correo = $('#correo').val();
-            var pass = $('#pass').val();
-            var rol = $('#rol').val();
-            //var rol = document.getElementById('rol').value;
+        
+    //var correoValidado = false;
+    function enviaDatos() {
+        var nombre = $('#nombre').val();
+        var apellidos = $('#apellidos').val();
+        var correo = $('#correo').val();
+        var pass = $('#pass').val();
+        var rol = $('#rol').val();
+        //var rol = document.getElementById('rol').value;
 
-            if (nombre == "" || apellidos == "" || correo == "" || rol == 0){
-             $('#mensaje').html('Faltan campos por llenar').show(); 
-             setTimeout(function() {
-                 $('#mensaje').html('').hide();
-                }, 5000);;
-            }
-            // else {
-            //     document.Forma01.method = 'post';
-            //     document.Forma01.action = 'empleados_editar.php';
-            //     document.Forma01.submit();
-            // }
+        if (nombre == "" || apellidos == "" || correo == "" || rol == 0){
+            $('#mensaje').html('Faltan campos por llenar').show(); 
+            setTimeout(function() {
+                $('#mensaje').html('').hide();
+            }, 5000);;
+        }
+        else{
+            // $(document).ready(function(){
+            //     $('#btnguardar').click(function(){
+                    var datos=$('#form2').serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "empleados_editar.php",
+                        data: datos,
+                        success:function(r){
+                            if (r == 1){
+                                alert("Fallo el server");
+                            }
+                            else{
+                                window.location.href = "empleados_lista.php";
+                            //     $('#alerta').html('Actualizado con exito').show();
+                            // setTimeout(function() {
+                            //     $('#alerta').html('').hide();
+                            // }, 5000);
+                            }
+                        }
+                    });
+                    return false;
+            //     });
+            // });
+            
         }
 
+    }
+        
 
     function sale() {
         var correo = $('#correo').val();
@@ -172,6 +196,12 @@
             }
         });
     }
+
+$(document).ready(function() {
+    //sale();
+    //enviaDatos();
+});   
+
 
     </script>
 </head>
@@ -222,7 +252,7 @@
         </div>
         <div class="caja">
             <span>Correo</span><br>
-            <input type="text" name="correo" id="correo" value="<?php echo $correo; ?>"><br>
+            <input onblur="sale()" type="text" name="correo" id="correo" autocomplete="off" value="<?php echo $correo; ?>"><br>
         </div>
         <div class="caja">
             <span>Password </span><br>
@@ -237,7 +267,7 @@
             </select>
         </div>
         
-        <!-- <input class="input-salvar" onclick="enviaDatos(); return false;" type="submit" value="Actualizar"> -->
+        <!-- <input class="input-salvar" id="btnguardar" onclick="enviaDatos(); return false;" type="submit" value="Actualizar"> -->
         <button id="btnguardar" onclick="enviaDatos(); return false;">
             Salvar
         </button>
@@ -251,7 +281,7 @@
 
 </html>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function(){
         $('#btnguardar').click(function(){
             var datos=$('#form2').serialize();
@@ -264,12 +294,16 @@
                         alert("Fallo el server");
                     }
                     else{
-                        window.location.href = "empleados_lista.php";
-                    }
+                        //window.location.href = "empleados_lista.php";
+                        $('#alerta').html('Actualizado con exito').show();
+                    setTimeout(function() {
+                        $('#alerta').html('').hide();
+                    }, 5000);
+                        }
                 }
             });
             return false;
         });
     });
-</script>
+</script> -->
 

@@ -161,3 +161,25 @@
 </body>
 
 </html>
+
+
+// function enviaDatos() {
+        //     var nombre = $('#nombre').val();
+        //     var apellidos = $('#apellidos').val();
+        //     var correo = $('#correo').val();
+        //     var pass = $('#pass').val();
+        //     var rol = $('#rol').val();
+        //     //var rol = document.getElementById('rol').value;
+
+        //     if (nombre == "" || apellidos == "" || correo == "" || pass == "" || rol == 0){
+        //      $('#mensaje').html('Faltan campos por llenar').show(); 
+        //      setTimeout(function() {
+        //          $('#mensaje').html('').hide();
+        //         }, 5000);;
+        //     }
+        //     // else {
+        //     //     document.Forma01.method = 'post';
+        //     //     document.Forma01.action = 'empleados_salva.php';
+        //     //     document.Forma01.submit();
+        //     // }
+        // }

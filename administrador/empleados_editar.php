@@ -1,16 +1,16 @@
 <?php
-// Incluir el archivo de conexión a la base de datos
+//archivo de conexión a la base de datos
 require "funciones/conecta.php";
 
-// Establecer la conexión
+//establece conexión
 $con = conecta();
 
-// Verificar si se han enviado datos del formulario
+//Verifica envio de datos del formulario
 if (isset($_POST['id'])) {
-    // Capturar el ID del empleado desde el formulario
+    //Captura ID de empleado desde formulario
     $id = $_POST['id'];
 
-    // Verificar si el empleado existe en la base de datos
+    //verifica si existe en la bd
     $sql = "SELECT * FROM empleados WHERE id = '$id'";
     $res = $con->query($sql);
 
@@ -18,16 +18,16 @@ if (isset($_POST['id'])) {
         // Si el empleado existe, actualizar sus datos
         $nombre = $_POST['nombre'];
         $apellidos = $_POST['apellidos'];
-        $pass = $_POST['pass']; // Contraseña sin cifrar
+        $pass = $_POST['pass']; 
         $correo = $_POST['correo'];
         $rol = $_POST['rol'];
-        $archivo_n = ''; // Nombre del archivo si se está actualizando
-        $archivo_f = ''; // Contenido del archivo si se está actualizando
+        $archivo_n = ''; 
+        $archivo_f = ''; 
 
-        // Cifrar la contraseña antes de almacenarla
-        $passEnc = md5($pass); // Usar un método de cifrado seguro en producción
+        //cifrar contraseña
+        $passEnc = md5($pass); 
 
-        // Consulta para actualizar los datos del empleado
+        //Consulta para actualizar los datos del empleado
         $sql_update = "UPDATE empleados SET 
                             nombre = '$nombre', 
                             apellidos = '$apellidos',  
@@ -38,26 +38,25 @@ if (isset($_POST['id'])) {
                             archivo_f = '$archivo_f' 
                         WHERE id = $id";
 
-        // Ejecutar la consulta de actualización
+        //Ejecuta consulta de actualización
         echo $res_update = $con->query($sql_update);
 
         if ($res_update) {
-            // Si la actualización fue exitosa, devolver un mensaje de éxito
+            //la actualización fue exitosa
             echo json_encode(['success' => true, 'message' => 'Los datos del empleado se actualizaron correctamente.']);
         } else {
-            // Si la actualización falló, devolver un mensaje de error
+            //falló
             echo json_encode(['success' => false, 'message' => 'Error al actualizar los datos del empleado.']);
         }
     } else {
-        // Si el empleado no existe, devolver un mensaje de error
         echo json_encode(['success' => false, 'message' => 'El empleado no existe en la base de datos.']);
     }
 } else {
-    // Si no se enviaron datos del formulario, devolver un mensaje de error
     echo json_encode(['success' => false, 'message' => 'No se han recibido datos del formulario para actualizar.']);
 }
 
-// Cerrar la conexión a la base de datos
+//cerrar la conexión a la bd
 $con->close();
-header("Location: empleados_lista.php");
+
+//header("Location: empleados_lista.php");
 ?>

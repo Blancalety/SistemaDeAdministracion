@@ -108,26 +108,6 @@
     
     <script>
         //js
-        function enviaDatos() {
-            var nombre = $('#nombre').val();
-            var apellidos = $('#apellidos').val();
-            var correo = $('#correo').val();
-            var pass = $('#pass').val();
-            var rol = $('#rol').val();
-            //var rol = document.getElementById('rol').value;
-
-            if (nombre == "" || apellidos == "" || correo == "" || pass == "" || rol == 0){
-             $('#mensaje').html('Faltan campos por llenar').show(); 
-             setTimeout(function() {
-                 $('#mensaje').html('').hide();
-                }, 5000);;
-            }
-            // else {
-            //     document.Forma01.method = 'post';
-            //     document.Forma01.action = 'empleados_salva.php';
-            //     document.Forma01.submit();
-            // }
-        }
 
         function sale() {
             var correo = $('#correo').val();
@@ -135,7 +115,7 @@
             $.ajax({
                 url: 'verificar_correo.php',
                 method: 'POST',
-                data: { correo: correo },
+                data: { correo: correo, validacion:true },
                 dataType: 'json',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
                 success: function(response) {
                     if (response.success) {
@@ -159,6 +139,7 @@
             });
         }
 
+
     </script>
 </head>
 
@@ -180,7 +161,7 @@
         </select>
         <br>
         <!-- <input class="input-salvar" onclick="enviaDatos(); return false;" type="submit" value="Salvar"> -->
-        <button id="btnguardar" onclick="enviaDatos(); return false;">
+        <button id="btnguardar">
             Salvar
         </button>
 
@@ -206,7 +187,22 @@
                         alert("Fallo el server");
                     }
                     else{
-                        window.location.href = "empleados_lista.php";
+                        var nombre = $('#nombre').val();
+                        var apellidos = $('#apellidos').val();
+                        var correo = $('#correo').val();
+                        var pass = $('#pass').val();
+                        var rol = $('#rol').val();
+                        //var rol = document.getElementById('rol').value;
+
+                        if (nombre == "" || apellidos == "" || correo == "" || pass == "" || rol == 0){
+                        $('#mensaje').html('Faltan campos por llenar').show(); 
+                        setTimeout(function() {
+                            $('#mensaje').html('').hide();
+                            }, 5000);;
+                        }else{
+                            window.location.href = "empleados_lista.php";
+                        }
+                        
                     }
                 }
             });
