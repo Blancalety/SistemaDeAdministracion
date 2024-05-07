@@ -144,7 +144,7 @@
                 //console.log("hola");
                 //$('#previa-imagen').attr('src', 'archivos/default.png');
                 img.src = defaultFile;
-                rounded.style.display = 'none';
+                //rounded.style.display = 'none';
             }
         }
 
