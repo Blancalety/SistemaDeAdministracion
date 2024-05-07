@@ -7,7 +7,7 @@ $con = conecta();
 if(isset($_POST['id'])){
     $id = $_POST['id']; // Captura el ID del empleado
 
-    $sql = "SELECT id, nombre, apellidos, correo, rol, pass, status FROM empleados WHERE id = $id"; // Consulta para obtener los detalles del empleado
+    $sql = "SELECT id, nombre, apellidos, correo, rol, pass, status, archivo_f FROM empleados WHERE id = $id"; // Consulta para obtener los detalles del empleado
 
     $res = $con->query($sql); // Ejecuta la consulta
 
@@ -25,6 +25,5 @@ if(isset($_POST['id'])){
 $con->close(); // Cierra la conexión a la base de datos
 
 ?>
-
 
 

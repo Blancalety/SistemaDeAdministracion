@@ -69,9 +69,20 @@
             font-family: Arial, sans-serif;
             border: 1px solid #000;
             border-radius: 6px;
-            margin-top: 60px;
-            margin-left: auto;  /* Ajusta el margen izquierdo a automático para centrar */
+            margin-top: 1px;
+            margin-left: 36%;  /* Ajusta el margen izquierdo a automático para centrar */
             margin-right: auto;
+        }
+
+        .rounded {
+            border-radius: 50%; /* Imagen redonda */
+            margin-top: 1px;
+            border: 2px solid black;
+            margin-left: 44%;
+        }
+
+        #archivo {
+            display: none;
         }
 
     </style>
@@ -102,6 +113,9 @@
     ];
     $statusValor = isset($statusResultado[$status]) ? $statusResultado[$status] : 'Desconocido';
 
+    $archivo = $_GET['archivo'];
+    
+
     // Mostrar los detalles del empleado en la página
     // echo "Nombre: " . $nombre . " " . $apellidos . "<br>";
     // echo "Correo: " . $correo . "<br>";
@@ -110,8 +124,38 @@
 
     ?>
 
+    <script>
+
+        function previsualizarImagen(input) {
+            const defaultFile = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eMoz7DH8l_Q-iCzSc1xyu_C2iryWh2O9_FcDBpY04w&s';
+            const img = document.getElementById('previa-imagen'); 
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previa-imagen')
+                        .attr('src', e.target.result)
+                        .show();
+
+                 };
+                reader.readAsDataURL(input.files[0]);
+            }
+            else {
+                //console.log("hola");
+                //$('#previa-imagen').attr('src', 'archivos/default.png');
+                img.src = defaultFile;
+                rounded.style.display = 'none';
+            }
+        }
+
+    </script>
+
     <div class='titulo'>Detalles del empleado</div>
     <a href="empleados_lista.php" class="link boton">Regresar al listado</a><br><br>
+
+    <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
+    style="width: 190px; height: 220px; "><br>
+    <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
     <div class="table">
 
         <!-- Fila Header -->
@@ -131,6 +175,9 @@
         </div>
     
     </div> 
+
+<!-- 
+    <img src='$destination' alt='Imagen guardada'> -->
 
 </body>
 </html>

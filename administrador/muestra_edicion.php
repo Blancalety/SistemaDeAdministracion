@@ -24,6 +24,12 @@
             margin-bottom: 10px;
         }
 
+        .opcional {
+            font-size: small; 
+            font-family: 'Comic Sans MS', cursive, sans-serif; 
+            color: #800000; 
+        }
+
         button {
             width: 35%; 
             box-sizing: border-box;
@@ -113,6 +119,14 @@
             border: 1px solid black;
         }
 
+        .rounded {
+            width: 200px;
+            border-radius: 50%; /* Imagen redonda */
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border: 2px solid black;
+        }
+
     </style>
         
     <!--formulario va a salva-->
@@ -121,50 +135,6 @@
     
     <script>
         //js
-        
-    //var correoValidado = false;
-    function enviaDatos() {
-        var nombre = $('#nombre').val();
-        var apellidos = $('#apellidos').val();
-        var correo = $('#correo').val();
-        var pass = $('#pass').val();
-        var rol = $('#rol').val();
-        //var rol = document.getElementById('rol').value;
-
-        if (nombre == "" || apellidos == "" || correo == "" || rol == 0){
-            $('#mensaje').html('Faltan campos por llenar').show(); 
-            setTimeout(function() {
-                $('#mensaje').html('').hide();
-            }, 5000);;
-        }
-        else{
-            // $(document).ready(function(){
-            //     $('#btnguardar').click(function(){
-                    var datos=$('#form2').serialize();
-                    $.ajax({
-                        type: "POST",
-                        url: "empleados_editar.php",
-                        data: datos,
-                        success:function(r){
-                            if (r == 1){
-                                alert("Fallo el server");
-                            }
-                            else{
-                                window.location.href = "empleados_lista.php";
-                            //     $('#alerta').html('Actualizado con exito').show();
-                            // setTimeout(function() {
-                            //     $('#alerta').html('').hide();
-                            // }, 5000);
-                            }
-                        }
-                    });
-                    return false;
-            //     });
-            // });
-            
-        }
-
-    }
         
 
     function sale() {
@@ -197,6 +167,26 @@
         });
     }
 
+    function previsualizarImagen(input) {
+            //const defaultFile = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eMoz7DH8l_Q-iCzSc1xyu_C2iryWh2O9_FcDBpY04w&s';
+            const img = document.getElementById('previa-imagen'); 
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previa-imagen')
+                        .attr('src', e.target.result)
+                        .show();
+
+                 };
+                reader.readAsDataURL(input.files[0]);
+            }else{
+                    //console.log("No se ha seleccionado ningún archivo");
+                    $('#previa-imagen').attr('src', 'archivos/default.png');
+                    //img.src = defaultFile;
+                }
+        }
+
 $(document).ready(function() {
     //sale();
     //enviaDatos();
@@ -228,6 +218,8 @@ $(document).ready(function() {
     ];
     $rols = isset($roles[$rol]) ? $roles[$rol] : 'Desconocido';
 
+    $archivo = $_GET['archivo'];
+
 ?>
 
     <div class="titulo">Edicion de empleados</div>
@@ -255,8 +247,8 @@ $(document).ready(function() {
             <input onblur="sale()" type="text" name="correo" id="correo" autocomplete="off" value="<?php echo $correo; ?>"><br>
         </div>
         <div class="caja">
-            <span>Password </span><br>
-            <input type="password" name="pass" id="pass" value="<?php echo $pass; ?>"><br>
+            <span>Password <span class="opcional">opcional</span>  </span><br>
+            <input type="password" name="pass" id="pass" placeholder="Escribe tu password"><br>
         </div>
         <div class="caja">
             <span>Rol </span><br>
@@ -266,9 +258,13 @@ $(document).ready(function() {
                 <option value="2" <?php if ($rols == 'Ejecutivo') echo "selected"; ?>>Ejecutivo</option>
             </select>
         </div>
+
+        <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
+        style="width: 200px; height: 250px;"><br>
+        <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
         
         <!-- <input class="input-salvar" id="btnguardar" onclick="enviaDatos(); return false;" type="submit" value="Actualizar"> -->
-        <button id="btnguardar" onclick="enviaDatos(); return false;">
+        <button id="btnguardar" type="submit" class="input-salvar">
             Salvar
         </button>
 
@@ -281,29 +277,40 @@ $(document).ready(function() {
 
 </html>
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function(){
         $('#btnguardar').click(function(){
-            var datos=$('#form2').serialize();
+            var formData = new FormData($('#form2')[0]);
             $.ajax({
                 type: "POST",
                 url: "empleados_editar.php",
-                data: datos,
+                data: formData,
+                processData: false, // Desactivar el procesamiento de datos
+                contentType: false, // Desactivar el tipo de contenido
                 success:function(r){
                     if (r == 1){
                         alert("Fallo el server");
                     }
                     else{
-                        //window.location.href = "empleados_lista.php";
-                        $('#alerta').html('Actualizado con exito').show();
-                    setTimeout(function() {
-                        $('#alerta').html('').hide();
-                    }, 5000);
+                        var nombre = $('#nombre').val();
+                        var apellidos = $('#apellidos').val();
+                        var correo = $('#correo').val();
+                        var rol = $('#rol').val();
+
+                        if (nombre == "" || apellidos == "" || correo == "" || rol == 0 ){
+                        $('#mensaje').html('Faltan campos por llenar').show(); 
+                        setTimeout(function() {
+                            $('#mensaje').html('').hide();
+                            }, 5000);
+                        }else{
+                            window.location.href = "empleados_lista.php";
                         }
+                        
+                    }
                 }
             });
             return false;
         });
     });
-</script> -->
+</script>
 

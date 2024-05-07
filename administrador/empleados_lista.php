@@ -150,8 +150,9 @@ function botonDetalles() {
                     setTimeout(function() {
                         var empleado = response.empleado;
                         var url = 'muestra_detalles.php?nombre=' + empleado.nombre + '&apellidos=' + empleado.apellidos + 
-                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&status=' + empleado.status;
-                        window.location.href = url; // Redireccionar a la página con datos del empleado en URL
+                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&status=' + empleado.status + '&archivo=' + empleado.archivo_f;
+
+                        window.location.href = url 
                         //window.location.href = "empleados_alta.php";
                     }, 300);
                 }, 400);
@@ -171,6 +172,7 @@ function botonDetalles() {
                     }, 3000);
             }
         });
+        
         
     });
 }
@@ -196,7 +198,7 @@ function botonEditar() {
                     setTimeout(function() {
                         var empleado = response.empleado;
                         var url = 'muestra_edicion.php?nombre=' + empleado.nombre + '&id=' + empleado.id + '&apellidos=' + empleado.apellidos + 
-                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&pass=' + empleado.pass;
+                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&pass=' + empleado.pass + '&archivo=' + empleado.archivo_f;
                         window.location.href = url; // Redireccionar a la página con datos del empleado en URL
                     }, 300);
                 }, 400);

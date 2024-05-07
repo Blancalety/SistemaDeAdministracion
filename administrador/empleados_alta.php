@@ -100,9 +100,29 @@
             border: 1px solid black;
         }
 
+        .rounded {
+            width: 200px;
+            border-radius: 50%; /* Imagen redonda */
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border: 2px solid black;
+            padding: 5px;
+        }
+
+        #archivo {
+            width: 75%; 
+            box-sizing: border-box;
+            margin-top: 5px;
+            padding: 7px;
+            border-radius: 4px; 
+            border: 1px solid black;
+            background-color: beige;
+        }
+
+
+
     </style>
         
-    <!--formulario va a salva-->
     <!--<script src="js/jquery-3.3.1.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
@@ -139,6 +159,23 @@
             });
         }
 
+        function previsualizarImagen(input) {
+            const defaultFile = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eMoz7DH8l_Q-iCzSc1xyu_C2iryWh2O9_FcDBpY04w&s';
+            const img = document.getElementById('previa-imagen'); 
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previa-imagen')
+                        .attr('src', e.target.result)
+                        .show();
+                 };
+                reader.readAsDataURL(input.files[0]);
+            }else{
+                img.src = defaultFile;
+            }
+        }
+
 
     </script>
 </head>
@@ -148,20 +185,25 @@
     <div class="titulo">Alta de empleados</div>
     <a href="empleados_lista.php" class="link boton">Regresar al listado</a><br><br>
 
-    <form name="Forma01" action="empleados_salva.php" method="post" autocomplete="off" id="form1">
+    <form enctype="multipart/form-data" name="Forma01" action="empleados_salva.php" method="post" id="form1">
         <input type="text" name="nombre" id="nombre" placeholder="Escribe tu nombre" autocomplete="off"> <br>
         <input type="text" name="apellidos" id="apellidos" placeholder="Escribe tus apellidos" autocomplete="off"> <br>
         <!--<input type="text" name="correo" id="correo" placeholder="Escribe tu correo"> <br>-->
         <input onblur="sale()" type="text" name="correo" id="correo" placeholder="Escribe tu correo" autocomplete="off"><br>
-        <input type="text" name="pass" id="pass" placeholder="Escribe tu password" autocomplete="off"> <br>
+        <input type="password" name="pass" id="pass" placeholder="Escribe tu password" autocomplete="off"> <br>
         <select name="rol" id="rol" class="rol">
             <option value="0">Selecciona</option>
             <option value="1">Gerente</option>
             <option value="2">Ejecutivo</option>
-        </select>
-        <br>
-        <!-- <input class="input-salvar" onclick="enviaDatos(); return false;" type="submit" value="Salvar"> -->
-        <button id="btnguardar">
+        </select><br><br>
+
+        <img id="previa-imagen" class="previa-imagen rounded" src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eMoz7DH8l_Q-iCzSc1xyu_C2iryWh2O9_FcDBpY04w&s' alt="avatar"
+        style="width: 200px; height: 250px;"><br>
+        <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)"><br><br>
+        
+        
+        <!-- <input type="submit" id="btnguardar" class="input-salvar"  value="Salvar"> -->
+        <button id="btnguardar" type="submit" class="input-salvar">
             Salvar
         </button>
 
@@ -174,14 +216,17 @@
 
 </html>
 
+<!--formulario va a salva-->
 <script type="text/javascript">
     $(document).ready(function(){
         $('#btnguardar').click(function(){
-            var datos=$('#form1').serialize();
+            var formData = new FormData($('#form1')[0]);
             $.ajax({
                 type: "POST",
                 url: "empleados_salva.php",
-                data: datos,
+                data: formData,
+                processData: false, // Desactivar el procesamiento de datos
+                contentType: false, // Desactivar el tipo de contenido
                 success:function(r){
                     if (r == 1){
                         alert("Fallo el server");
@@ -192,13 +237,13 @@
                         var correo = $('#correo').val();
                         var pass = $('#pass').val();
                         var rol = $('#rol').val();
-                        //var rol = document.getElementById('rol').value;
+                        var archivoInput = document.getElementById('archivo');
 
-                        if (nombre == "" || apellidos == "" || correo == "" || pass == "" || rol == 0){
+                        if (nombre == "" || apellidos == "" || correo == "" || pass == "" || rol == 0 || archivoInput.files.length === 0){
                         $('#mensaje').html('Faltan campos por llenar').show(); 
                         setTimeout(function() {
                             $('#mensaje').html('').hide();
-                            }, 5000);;
+                            }, 5000);
                         }else{
                             window.location.href = "empleados_lista.php";
                         }
@@ -210,7 +255,3 @@
         });
     });
 </script>
-
-<!--
-validar y eliminar correo con ajax
--->
