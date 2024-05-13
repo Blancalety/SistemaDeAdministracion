@@ -1,3 +1,11 @@
+<?php
+
+session_start();
+
+$nombre = $_SESSION['nombreUser'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +32,7 @@
 </head>
 <body>
 
-<div class="titulo">Hola, bienvenido al sistema Star</div>
+<div class="titulo">Hola <?php echo $nombre; ?> bienvenido al sistema Star</div>
 
   
 </body>

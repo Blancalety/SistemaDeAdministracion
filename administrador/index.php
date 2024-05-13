@@ -135,7 +135,7 @@
 
                     },
                     error: function() {
-                        $('#alerta').html('Error!').show();
+                        $('#alerta').html('Error en index.php!').show();
                         setTimeout(function() {
                             $('#alerta').html('').hide();
                         }, 5000);
@@ -155,7 +155,7 @@
     <div class="titulo">Sistema de administracion de empleados</div>
 
         <input type="text" name="correo" id="correo" placeholder="Escribe tu correo" autocomplete="off"><br>
-        <input type="text" name="pass" id="pass" placeholder="Escribe tu password" autocomplete="off"> <br>
+        <input type="password" name="pass" id="pass" placeholder="Escribe tu password" autocomplete="off"> <br>
 
         <br>
 

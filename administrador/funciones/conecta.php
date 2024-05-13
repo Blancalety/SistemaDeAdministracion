@@ -9,5 +9,5 @@ function conecta(){
     $con =new mysqli(HOST, USER_BD, PASS_BD, BD);
     return $con;
 }
-//archivo que se conecte a la bd para listar los empleados
+//archivo que se conecta a la bd para listar los empleados
 ?>
