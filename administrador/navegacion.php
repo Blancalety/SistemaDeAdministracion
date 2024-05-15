@@ -27,7 +27,7 @@
     
     <section class="hero">
         <div class="contenido-hero">
-            <h2>Sistema de gestion</h2> 
+            <h2>Administracion de empleados</h2> 
             <div class="ubicacion">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="50" height="50" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFC107" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z"/>
@@ -38,67 +38,18 @@
     </section>
     
     <main class="contenedor sombra">
-        <h2>Mis Servicios</h2>
+        <h2>Menu principal</h2>
 
         <div class="servicios">
             <section class="servicio">
-                <h3>Diseño Web</h3>
-                <div class="iconos">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <path d="M12 21a9 9 0 1 1 0 -18a9 8 0 0 1 9 8a4.5 4 0 0 1 -4.5 4h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
-                        <circle cx="7.5" cy="10.5" r=".5" fill="currentColor" />
-                        <circle cx="12" cy="7.5" r=".5" fill="currentColor" />
-                        <circle cx="16.5" cy="10.5" r=".5" fill="currentColor" />
-                    </svg>
-                </div>
-                <p> Pellentesque odio ex, bibendum quis convallis scelerisque, eleifend vitae lectus. Quisque in erat justo. </p>
+                <h3>Bienvenido a Star!</h3>
+                <p> Estamos muy felices de que estes aqui. </p>
             </section>
-        
-            <section class="servicio">
-                <h3>Aplicaciones Web</h3>
-                <div class="iconos">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-android" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <line x1="4" y1="10" x2="4" y2="16" />
-                        <line x1="20" y1="10" x2="20" y2="16" />
-                        <path d="M7 9h10v8a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-8a5 5 0 0 1 10 0" />
-                        <line x1="8" y1="3" x2="9" y2="5" />
-                        <line x1="16" y1="3" x2="15" y2="5" />
-                        <line x1="9" y1="18" x2="9" y2="21" />
-                        <line x1="15" y1="18" x2="15" y2="21" />
-                    </svg>
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-apple" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <path d="M9 7c-3 0-4 3-4 5.5 0 3 2 7.5 4 7.5 1.088-.046 1.679-.5 3-.5 1.312 0 1.5.5 3 .5s4-3 4-5c-.028-.01-2.472-.403-2.5-3-.019-2.17 2.416-2.954 2.5-3-1.023-1.492-2.951-1.963-3.5-2-1.433-.111-2.83 1-3.5 1-.68 0-1.9-1-3-1z" />
-                        <path d="M12 4a2 2 0 0 0 2 -2a2 2 0 0 0 -2 2" />
-                    </svg>
-                </div>
-                <p> Pellentesque odio ex, bibendum quis convallis scelerisque, eleifend vitae lectus. Quisque in erat justo. </p>
-            </section>
-
-            <section class="servicio">
-                <h3>E-Commerce</h3>
-                <div class="iconos">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-credit-card" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <rect x="3" y="5" width="18" height="14" rx="3" />
-                        <line x1="3" y1="10" x2="21" y2="10" />
-                        <line x1="7" y1="15" x2="7.01" y2="15" />
-                        <line x1="11" y1="15" x2="13" y2="15" />
-                    </svg>
-                </div>
-                <p> Pellentesque odio ex, bibendum quis convallis scelerisque, eleifend vitae lectus. Quisque in erat justo. </p>
-            </section>
-        </div> <!--.servicios-->
-    
-        
-
+        </div> 
     </main>
     
     <footer class="footer">
-        <p>Todos los derechos reservados. Juan De la torre Freelancer</p>
+        <p>Todos los derechos reservados. Blanca leticia RR</p>
     </footer>
 
 

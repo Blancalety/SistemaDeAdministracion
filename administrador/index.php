@@ -6,7 +6,7 @@
     <title>Inicio</title>
     <style>
         body {
-            background-color: #f2f2f2;
+            background-color: #DFE9F3;
         }
 
         input {
@@ -22,16 +22,19 @@
             box-sizing: border-box;
             margin-top: 5px;
             padding: 7px; 
+            color: white;
+            background-color: #DF2614;
         }
 
         form {
             font-family: 'Helvetica', sans-serif;
             font-size: 1.5em;
             font-weight: bold;
-            margin-top: 13rem;
+            color: white;
+            margin-top: 5px;
             margin-bottom: 30px;
             text-align: center;
-            background-color: lightgray;
+            background-color: #0097A7;
             border: 2px solid black; 
             border-radius: 5px;
             padding: 15px; 
@@ -43,16 +46,19 @@
             font-family: 'Verdana', sans-serif;
             font-size: 0.8em;
             font-weight:bolder;
-            margin-top: 1rem;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            margin-bottom: 5px;
             text-align: center;
         }
-
-        .boton {
-            background: rgb(255, 255, 153);
-            margin-left: 20rem;
+        .tema {
+            font-family: 'Verdana', sans-serif;
+            font-size: 2rem;
+            font-weight:bolder;
+            margin-top: 30px;
+            margin-bottom: 2px;
+            text-align: center;
+            line-height: 200px;
         }
-
         .link {
             color: black;
             font-family: Arial, sans-serif;
@@ -150,7 +156,7 @@
 
 <body>
 
-
+    <div class="tema">Login</div>
     <form name="Forma01" action="verificar_usuario.php" method="post" autocomplete="off">
     <div class="titulo">Sistema de administracion de empleados</div>
 
