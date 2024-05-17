@@ -1,8 +1,11 @@
 <?php
 
 session_start();
-
+if(!$correo = $_SESSION['correoUser']){
+    header("Location: index.php");
+}
 $nombre = $_SESSION['nombreUser'];
+$correo = $_SESSION['correoUser'];
 
 ?>
 
@@ -21,7 +24,6 @@ $nombre = $_SESSION['nombreUser'];
         <h1 class="titulo"><?php echo $nombre; ?> <span>bienvenido al sistema Star </span></h1>
 
     </header>
-    <!-- <div class="titulo">Hola <?php echo $nombre; ?> bienvenido al sistema Star</div> -->
 
     <?php
 

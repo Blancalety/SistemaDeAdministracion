@@ -14,13 +14,13 @@
 
     <div class="nav-bg">
         <nav class="navegacion-principal contenedor">
-            <a href="bienvenido.php">Inicio</a>
+            <a href="index.php">Inicio</a>
             <a href="empleados_lista.php">Empleados</a>
             <a href="#">Productos</a>
             <a href="#">Promociones</a>
             <a href="#">Pedidos</a>
             <a href="#">Bienvenido <?php echo $nombre; ?> </a>
-            <a href="#">Cerrar Sesion</a>
+            <a href="cerrar_sesion.php">Cerrar Sesion</a>
         </nav>
     </div>
     

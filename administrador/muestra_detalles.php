@@ -1,8 +1,11 @@
 <?php
 
 session_start();
-
+if(!$correo = $_SESSION['correoUser']){
+    header("Location: index.php");
+}
 $nombre = $_SESSION['nombreUser'];
+$correo = $_SESSION['correoUser'];
 
 ?>
 <!DOCTYPE html>

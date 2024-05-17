@@ -20,7 +20,7 @@
             <a href="#">Promociones</a>
             <a href="#">Pedidos</a>
             <a href="bienvenido.php">Bienvenido <?php echo $nombre; ?> </a>
-            <a href="#">Cerrar Sesion</a>
+            <a href="cerrar_sesion.php">Cerrar Sesion</a>
         </nav>
     </div>
     

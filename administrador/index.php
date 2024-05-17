@@ -1,3 +1,10 @@
+<?php  
+    error_reporting(0);
+    session_start();
+    if($correo = $_SESSION['correoUser']){
+        header("Location: bienvenido.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
