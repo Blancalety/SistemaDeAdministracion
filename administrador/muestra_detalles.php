@@ -1,3 +1,10 @@
+<?php
+
+session_start();
+
+$nombre = $_SESSION['nombreUser'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +14,6 @@
 
 
     <style>
-
         body {
             background-color: #f2f2f2;
         }
@@ -21,7 +27,7 @@
             text-align: center;
         }
 
-        .boton {
+        .botonlista {
             background: rgb(255, 255, 153);
             margin-left: 20rem;
         }
@@ -92,6 +98,8 @@
 
     <?php
 
+    include('navegacionGeneral.php');
+
     require "funciones/conecta.php";
 
     $con = conecta();
@@ -151,10 +159,10 @@
     </script>
 
     <div class='titulo'>Detalles del empleado</div>
-    <a href="empleados_lista.php" class="link boton">Regresar al listado</a><br><br>
+    <a href="empleados_lista.php" class="link botonlista">Regresar al listado</a><br><br>
 
     <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
-    style="width: 190px; height: 220px; "><br>
+    style="width: 170px; height: 160px; "><br>
     <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
     <div class="table">
 

@@ -6,7 +6,8 @@
     <title>Inicio</title>
     <style>
         body {
-            background-color: #DFE9F3;
+            background: linear-gradient(150deg, #C5B8D9, #A3F3EA);
+            height: 100vh;
         }
 
         input {

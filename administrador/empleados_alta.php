@@ -1,3 +1,11 @@
+<?php
+
+session_start();
+
+$nombre = $_SESSION['nombreUser'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     
@@ -25,11 +33,18 @@
             border-radius: 4px; 
         }
 
-        form {
+        .caja {
+            font-size: 15px;
+            color: #4E5C92;
+            font-family: 'Helvetica', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .form {
             font-family: 'Helvetica', sans-serif;
             font-size: 1.5em;
             font-weight: bold;
-            margin-top: 30px;
+            margin-top: 10px;
             margin-bottom: 30px;
             text-align: center;
             background-color: lightgray;
@@ -49,7 +64,7 @@
             text-align: center;
         }
 
-        .boton {
+        .botonlista {
             background: rgb(255, 255, 153);
             margin-left: 20rem;
         }
@@ -101,7 +116,7 @@
         }
 
         .rounded {
-            width: 200px;
+            width: 170px;
             border-radius: 50%; /* Imagen redonda */
             margin-top: 5px;
             margin-bottom: 5px;
@@ -181,32 +196,52 @@
 </head>
 
 <body>
+    <?php
+
+    include('navegacionGeneral.php');
+
+    ?>
 
     <div class="titulo">Alta de empleados</div>
-    <a href="empleados_lista.php" class="link boton">Regresar al listado</a><br><br>
+    <a href="empleados_lista.php" class="link botonlista">Regresar al listado</a><br><br>
 
-    <form enctype="multipart/form-data" name="Forma01" action="empleados_salva.php" method="post" id="form1">
-        <input type="text" name="nombre" id="nombre" placeholder="Escribe tu nombre" autocomplete="off"> <br>
-        <input type="text" name="apellidos" id="apellidos" placeholder="Escribe tus apellidos" autocomplete="off"> <br>
-        <!--<input type="text" name="correo" id="correo" placeholder="Escribe tu correo"> <br>-->
-        <input onblur="sale()" type="text" name="correo" id="correo" placeholder="Escribe tu correo" autocomplete="off"><br>
-        <input type="password" name="pass" id="pass" placeholder="Escribe tu password" autocomplete="off"> <br>
-        <select name="rol" id="rol" class="rol">
-            <option value="0">Selecciona</option>
-            <option value="1">Gerente</option>
-            <option value="2">Ejecutivo</option>
-        </select><br><br>
-
-        <img id="previa-imagen" class="previa-imagen rounded" src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eMoz7DH8l_Q-iCzSc1xyu_C2iryWh2O9_FcDBpY04w&s' alt="avatar"
-        style="width: 200px; height: 250px;"><br>
-        <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)"><br><br>
-        
+    <form class='form' enctype="multipart/form-data" name="Forma01" action="empleados_salva.php" method="post" id="form1">
+        <div class="caja">
+            <span>Nombre </span><br>
+            <input type="text" name="nombre" id="nombre" autocomplete="off"><br>
+        </div>
+        <div class="caja">
+            <span>Apellidos </span><br>
+            <input type="text" name="apellidos" id="apellidos" autocomplete="off"><br>
+        </div>
+        <div class="caja">
+            <span>Correo</span><br>
+            <input onblur="sale()" type="text" name="correo" id="correo" autocomplete="off" ><br>
+        </div>
+        <div class="caja">
+            <span>Password <span class="opcional">opcional</span>  </span><br>
+            <input type="password" name="pass" id="pass" placeholder="Escribe tu password" autocomplete="off"><br>
+        </div>
+        <div class="caja">
+            <span>Rol </span><br>
+            <select name="rol" id="rol" class="rol">
+                <option value="0">Selecciona</option>
+                <option value="1">Gerente</option>
+                <option value="2">Ejecutivo</option>
+            </select><br><br>
+        </div>
+        <div class="caja">
+            <img id="previa-imagen" class="previa-imagen rounded" src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eMoz7DH8l_Q-iCzSc1xyu_C2iryWh2O9_FcDBpY04w&s' alt="avatar"
+            style="width: 110; height: 150px;"><br>
+            <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)"><br><br>
+        </div>
         
         <!-- <input type="submit" id="btnguardar" class="input-salvar"  value="Salvar"> -->
-        <button id="btnguardar" type="submit" class="input-salvar">
-            Salvar
-        </button>
-
+        <div class="caja">
+            <button id="btnguardar" type="submit" class="input-salvar">
+                Salvar
+            </button>
+        </div>
         <div id="mensaje" class="mensaje"></div>
 
         <div id="alerta" class="alerta"></div>

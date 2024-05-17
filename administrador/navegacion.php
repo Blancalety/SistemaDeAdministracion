@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diseñador Freelancer</title>
+    <title>Bienvenido</title>
     <link rel="preload" href="css/normalize.css" as="style">
     <link rel="stylesheet" href="css/normalize.css">
     <link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;700&display=swap" rel="stylesheet">
@@ -14,10 +14,9 @@
 
     <div class="nav-bg">
         <nav class="navegacion-principal contenedor">
-            <a href="#">Inicio</a>
-            <a href="#">Empleados</a>
+            <a href="bienvenido.php">Inicio</a>
+            <a href="empleados_lista.php">Empleados</a>
             <a href="#">Productos</a>
-            <a href="#">Promociones</a>
             <a href="#">Promociones</a>
             <a href="#">Pedidos</a>
             <a href="#">Bienvenido <?php echo $nombre; ?> </a>
@@ -51,8 +50,6 @@
     <footer class="footer">
         <p>Todos los derechos reservados. Blanca leticia RR</p>
     </footer>
-
-
 
 </body>
 </html>

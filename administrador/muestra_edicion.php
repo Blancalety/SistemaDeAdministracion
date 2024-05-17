@@ -1,7 +1,13 @@
+<?php
+
+session_start();
+
+$nombre = $_SESSION['nombreUser'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-    
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +18,13 @@
         }
 
         input {
-            padding: 4px;
+            padding: 5px;
             border-radius: 5px;
             border: 1px solid black;
+        }
+
+        .inputfile {
+            padding: 1px;
         }
 
         .caja {
@@ -44,11 +54,12 @@
             font-size: 15px;
         }
 
+        /* mt */
         form {
             font-family: 'Helvetica', sans-serif;
             font-size: 1.5em;
             font-weight: bold;
-            margin-top: 30px;
+            margin-top: 10px;
             margin-bottom: 30px;
             text-align: center;
             background-color: lightgray;
@@ -56,7 +67,7 @@
             border-radius: 5px;
             padding: 15px; 
             width: calc(30% - 90px);
-            margin-left: 37%
+            margin-left: 37%;
         }
 
         .titulo {
@@ -68,7 +79,7 @@
             text-align: center;
         }
 
-        .boton {
+        .botonlista {
             background: rgb(255, 255, 153);
             margin-left: 20rem;
         }
@@ -200,6 +211,7 @@ $(document).ready(function() {
 
 <?php
 
+    include('navegacionGeneral.php');
     require "funciones/conecta.php";
 
     $con = conecta();
@@ -223,7 +235,7 @@ $(document).ready(function() {
 ?>
 
     <div class="titulo">Edicion de empleados</div>
-    <a href="empleados_lista.php" class="link boton">Regresar al listado</a><br><br>
+    <a href="empleados_lista.php" class="link botonlista">Regresar al listado</a><br><br>
 
     <!-- <div class="celda"><?php echo $nombre . " " . $apellidos; ?></div>
     <div class="celda"><?php echo $correo; ?></div>
@@ -258,15 +270,17 @@ $(document).ready(function() {
                 <option value="2" <?php if ($rols == 'Ejecutivo') echo "selected"; ?>>Ejecutivo</option>
             </select>
         </div>
-
-        <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
-        style="width: 200px; height: 250px;"><br>
-        <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
-        
+        <div class="caja">
+            <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
+            style="width: 170px; height: 150px;"><br>
+            <input class="inputfile" type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
+        </div>
         <!-- <input class="input-salvar" id="btnguardar" onclick="enviaDatos(); return false;" type="submit" value="Actualizar"> -->
-        <button id="btnguardar" type="submit" class="input-salvar">
-            Salvar
-        </button>
+        <div class="caja">
+            <button id="btnguardar" type="submit" class="input-salvar">
+                Salvar
+            </button>
+        </div>
 
         <div id="mensaje" class="mensaje"></div>
 

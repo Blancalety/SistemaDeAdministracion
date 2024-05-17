@@ -1,3 +1,10 @@
+<?php
+
+session_start();
+
+$nombre = $_SESSION['nombreUser'];
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -9,7 +16,7 @@
     <style>
         .table {
             display: table;
-            width: 85%;
+            width: 80%;
             margin-top: 25px;
             font-family: Arial, sans-serif;
             border: 1px solid #000;
@@ -44,7 +51,7 @@
         .header .celda {
             background-color: black;
         }
-
+        /* mt */
         .titulo {
             font-family: 'Verdana', sans-serif;
             font-size: 1.5em;
@@ -54,7 +61,7 @@
             text-align: center;
         }
 
-        .boton {
+        .botonlista {
             background: rgb(255, 255, 153);
             margin-left: 20rem;
         }
@@ -125,6 +132,8 @@
         }
         
     </style>
+</head>
+<body>
 
 <script>
 
@@ -267,9 +276,9 @@ $(document).ready(function() {
 </script>
 
 
-</head>
 
-<body>
+
+
     <?php
     require "funciones/conecta.php";
     $con = conecta();
@@ -291,8 +300,14 @@ $(document).ready(function() {
 
     ?>
 
+<?php
+
+include('navegacionGeneral.php');
+
+?>
+
     <div class='titulo'>Lista de empleados (<?php echo $num; ?>)</div>
-    <a href="empleados_alta.php" class="link boton">Agregar nuevo registro</a><br><br>
+    <a href="empleados_alta.php" class="link botonlista">Agregar nuevo registro</a><br><br>
     <div class="table">
 
         <!-- Fila Header -->
