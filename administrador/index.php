@@ -1,10 +1,13 @@
 <?php  
-    error_reporting(0);
-    session_start();
-    if($correo = $_SESSION['correoUser']){
-        header("Location: bienvenido.php");
-    }
+
+error_reporting(0);//Silencia los errores para que no se muestren al usuario.
+session_start();
+if($correo = $_SESSION['correoUser']){
+    header("Location: bienvenido.php");
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

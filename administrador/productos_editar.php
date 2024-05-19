@@ -4,23 +4,22 @@ require "funciones/conecta.php";
 $con = conecta();
 
 // Var recibidas del form
-$nombre     = $_REQUEST['nombre'];
-$apellidos  = $_REQUEST['apellidos'];
-$correo     = $_REQUEST['correo'];
-$pass       = $_REQUEST['pass'];
-$rol        = $_REQUEST['rol'];
-$passEnc    = !empty($pass) ? md5($pass) : ''; // Encriptación de la contraseña si se cambia
+$nombre         = $_REQUEST['nombre'];
+$codigo         = $_REQUEST['codigo'];
+$descripcion    = $_REQUEST['descripcion'];
+$costo          = $_REQUEST['costo'];
+$stock          = $_REQUEST['stock'];
 
 // Verificar si se envio el formulario
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
 
     // verificar correo electrónico 
-    $sql = "SELECT * FROM empleados WHERE id = '$id'";
+    $sql = "SELECT * FROM productos WHERE id = '$id'";
     $res = $con->query($sql);
 
     if ($res->num_rows > 0) {
-        // Actualizar el registro si el correo electrónico ya existe
+        // Actualizar el registro si el codigo ya existe
         // Subir archivo si hay
         if (isset($_FILES['archivo']) && $_FILES['archivo']['error'] === UPLOAD_ERR_OK) {
             $file_name  = $_FILES['archivo']['name'];       // Nombre real del archivo
@@ -37,7 +36,7 @@ if (isset($_POST['id'])) {
             move_uploaded_file($file_tmp, $dir . $fileName1);
         } else {
             //  mantener el valor existente en la bd
-            $sqlArchivo = "SELECT archivo_f, archivo_n FROM empleados WHERE id = '$id'";
+            $sqlArchivo = "SELECT archivo_f, archivo_n FROM productos WHERE id = '$id'";
             $resArchivo = $con->query($sqlArchivo);
             if ($resArchivo->num_rows > 0) {
                 $row = $resArchivo->fetch_assoc();
@@ -46,24 +45,18 @@ if (isset($_POST['id'])) {
             }
         }
 
-        // actualizar registro en la bd, aun si no se ingresa una contraseña:
-        // $sql = "UPDATE empleados SET nombre='$nombre', apellidos='$apellidos', correo='$correo', pass='$passEnc', rol=$rol, archivo_n='$file_name', archivo_f='$fileName1' WHERE id='$id'";
-        $sql = "UPDATE empleados SET nombre='$nombre', apellidos='$apellidos', correo='$correo', rol=$rol, archivo_n='$file_name', archivo_f='$fileName1'";
-        if (!empty($passEnc)) {
-            $sql .= ", pass='$passEnc'";
-        }
-        $sql .= " WHERE id='$id'";
-        
+        // actualizar registro en la bd
+        $sql = "UPDATE productos SET nombre='$nombre', codigo='$codigo', descripcion='$descripcion', costo=$costo, stock=$stock, archivo_n='$file_name', archivo_f='$fileName1' WHERE id='$id'";
         $res = $con->query($sql);
 
         if ($res) {
-            echo json_encode(['success' => true, 'message' => 'Empleado actualizado correctamente.']);
+            echo json_encode(['success' => true, 'message' => 'Producto actualizado correctamente.']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Error al actualizar empleado.']);
+            echo json_encode(['success' => false, 'message' => 'Error al actualizar Producto.']);
         }
     } else {
         // Si el correo electrónico no existe
-        echo json_encode(['success' => false, 'message' => 'El correo electrónico no existe en la base de datos.']);
+        echo json_encode(['success' => false, 'message' => 'El codigo no existe en la base de datos.']);
     }
 }
 

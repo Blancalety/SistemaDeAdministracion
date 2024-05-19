@@ -16,7 +16,7 @@
         <nav class="navegacion-principal contenedor">
             <a href="index.php">Inicio</a>
             <a href="empleados_lista.php">Empleados</a>
-            <a href="#">Productos</a>
+            <a href="productos_lista.php">Productos</a>
             <a href="#">Promociones</a>
             <a href="#">Pedidos</a>
             <a href="bienvenido.php">Bienvenido <?php echo $nombre; ?> </a>

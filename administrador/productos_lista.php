@@ -15,7 +15,7 @@ $correo = $_SESSION['correoUser'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de empleados</title>
+    <title>Lista de productos</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .table {
@@ -148,7 +148,7 @@ function botonDetalles() {
         var numero_id = $(this).data("id");
 
         $.ajax({
-            url: 'empleados_detalle.php', 
+            url: 'productos_detalle.php', 
             method: 'POST',
             dataType: 'json',
             data: { id: numero_id }, // Envío el ID del registro
@@ -161,9 +161,9 @@ function botonDetalles() {
                         $("#notification").html("").hide();
                     // Redirige después de x segundos
                     setTimeout(function() {
-                        var empleado = response.empleado;
-                        var url = 'muestra_detalles.php?nombre=' + empleado.nombre + '&apellidos=' + empleado.apellidos + 
-                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&status=' + empleado.status + '&archivo=' + empleado.archivo_f;
+                        var producto = response.producto;
+                        var url = 'muestra_detallesProducto.php?nombre=' + producto.nombre + '&id=' + producto.id + '&codigo=' + producto.codigo + 
+                        '&descripcion=' + producto.descripcion + '&costo=' + producto.costo + '&stock=' + producto.stock + '&archivo=' + producto.archivo_f;
 
                         window.location.href = url 
                         //window.location.href = "empleados_alta.php";
@@ -197,7 +197,7 @@ function botonEditar() {
         var numero_id = $(this).data("id");
 
         $.ajax({
-            url: 'empleados_detalle.php', 
+            url: 'productos_detalle.php', 
             method: 'POST',
             dataType: 'json',
             data: {id: numero_id}, // Envío de id, y otras variables
@@ -209,10 +209,11 @@ function botonEditar() {
                         $("#notification").html("").hide();
                     // Redirige después de x segundos
                     setTimeout(function() {
-                        var empleado = response.empleado;
-                        var url = 'muestra_edicion.php?nombre=' + empleado.nombre + '&id=' + empleado.id + '&apellidos=' + empleado.apellidos + 
-                        '&correo=' + empleado.correo + '&rol=' + empleado.rol + '&pass=' + empleado.pass + '&archivo=' + empleado.archivo_f;
-                        window.location.href = url; // Redireccionar a la página con datos del empleado en URL
+                        var producto = response.producto;
+                        var url = 'muestra_edicionProducto.php?nombre=' + producto.nombre + '&id=' + producto.id + '&codigo=' + producto.codigo + 
+                        '&descripcion=' + producto.descripcion + '&costo=' + producto.costo + '&stock=' + producto.stock + '&archivo=' + producto.archivo_f;
+
+                        window.location.href = url 
                     }, 300);
                 }, 400);
 
@@ -242,7 +243,7 @@ function botonEliminar() {
         if (confirm("¿Quieres eliminar esta fila?")) {
             var numero_id = $(this).data("id"); // Obtiene el ID del registro a eliminar
             $.ajax({
-                url: 'empleados_elimina.php', // Script PHP para eliminar el empleado
+                url: 'productos_elimina.php', // Script PHP para eliminar el empleado
                 method: 'POST',
                 dataType: 'json',
                 data: { id: numero_id }, // Envía el ID del registro
@@ -284,20 +285,16 @@ $(document).ready(function() {
     require "funciones/conecta.php";
     $con = conecta();
 
-    $sql = "SELECT * FROM empleados WHERE status = 1 AND eliminado = 0";
+    $sql = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
     $res = $con->query($sql);
     $num = $res->num_rows;
-
-    $roles = [
-        1 => 'Gerente',
-        2 => 'Ejecutivo',
-    ];
 
     $opciones = [
         1 => 'Ver detalle',
         2 => 'Editar',
         3 => 'Eliminar',
     ];
+
 
     ?>
 
@@ -307,37 +304,39 @@ include('navegacionGeneral.php');
 
 ?>
 
-    <div class='titulo'>Lista de empleados (<?php echo $num; ?>)</div>
-    <a href="empleados_alta.php" class="link botonlista">Agregar nuevo registro</a><br><br>
+    <div class='titulo'>Lista de productos (<?php echo $num; ?>)</div>
+    <a href="productos_alta.php" class="link botonlista">Agregar nuevo registro</a><br><br>
     <div class="table">
 
         <!-- Fila Header -->
         <div class="fila header">
-            <div class="celda">ID</div>
+            <div class="celda">Id</div>
+            <div class="celda">Codigo</div>
             <div class="celda">Nombre</div>
-            <div class="celda">Apellidos</div>
-            <div class="celda">Correo</div>
-            <div class="celda">Rol</div>
+            <div class="celda">Descripcion</div>
+            <div class="celda">Costo</div>
+            <div class="celda">Stock</div>
             <div class="celda">Opciones</div>
         </div>
 
         <?php
         while ($fila = $res->fetch_array()) {
-            $id = $fila["id"];
-            $nombre = $fila["nombre"];
-            $apellidos = $fila["apellidos"];
-            $correo = $fila["correo"];
-            $rol = $fila["rol"];
-            $nombreRol = isset($roles[$rol]) ? $roles[$rol] : 'Desconocido';
+            $id             = $fila["id"];
+            $codigo         = $fila["codigo"];
+            $nombre         = $fila["nombre"];
+            $descripcion    = $fila["descripcion"];
+            $costo          = $fila["costo"];
+            $stock          = $fila["stock"];
             ?>
 
             <!-- Fila Contenido -->
             <div class="fila">
                 <div class="celda"><?php echo $id; ?></div>
+                <div class="celda"><?php echo $codigo; ?></div>
                 <div class="celda"><?php echo $nombre; ?></div>
-                <div class="celda"><?php echo $apellidos; ?></div>
-                <div class="celda"><?php echo $correo; ?></div>
-                <div class="celda"><?php echo $nombreRol; ?></div>
+                <div class="celda"><?php echo $descripcion; ?></div>
+                <div class="celda"><?php echo $costo; ?></div>
+                <div class="celda"><?php echo $stock; ?></div>
                 <div class="celda">
                     <span class="detalles">
                         <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
@@ -348,7 +347,7 @@ include('navegacionGeneral.php');
                     </span>
 
                     <span class="eliminar">
-                        <a href="#" class='link' data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
+                        <a class='link' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
                     </span>
                 </div>
             </div>

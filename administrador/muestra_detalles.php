@@ -8,6 +8,7 @@ $nombre = $_SESSION['nombreUser'];
 $correo = $_SESSION['correoUser'];
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

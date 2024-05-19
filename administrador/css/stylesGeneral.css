@@ -17,6 +17,8 @@ html {
     box-sizing: inherit;
 }
 body {
+    font-size: 16px; /* 1rem = 10px */
+    font-family: 'Krub', sans-serif;
     font-size: 14px; /* 1rem = 10px */
 }
 .contenedor {
@@ -105,6 +107,7 @@ h1,h2,h3 {
 }
 
 .navegacion-principal a {
+    font-family: 'Krub', sans-serif; /* Añadir esta línea */
     display: block;
     text-align: center;
     color: var(--blanco);
