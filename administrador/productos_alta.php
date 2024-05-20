@@ -85,30 +85,22 @@ $correo = $_SESSION['correoUser'];
             text-decoration: none;
         }
 
-        #alerta {
-            display: none;
-            color: white;
-            text-align: center;
-            padding: 3px;
-            width: 80%;
-            margin: 10px;
-            border: #4CAF50;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            font-size: .7em;
-        }
-
+        #alerta,
         #mensaje {
+            position: absolute;
+            left: 55rem;
+            top: 119px; /* Ajusta según sea necesario */
+
             display: none;
             color: white;
             text-align: center;
             padding: 3px;
-            width: 80%;
-            margin: 10px;
+            width: 30%;
+            /* margin: 10px auto;Centra el elemento horizontalmente funciona sin el absolute */
             border: #4CAF50;
             border-radius: 5px;
             background-color: #4CAF50;
-            font-size: .7em;
+            font-size: 15px;
         }
 
         .rol {
@@ -147,19 +139,19 @@ $correo = $_SESSION['correoUser'];
         //js
 
         function sale() {
-            var correo = $('#correo').val();
+            var codigo = $('#codigo').val();
 
             $.ajax({
-                url: 'verificar_correo.php',
+                url: 'verificar_codigo.php',
                 method: 'POST',
-                data: { correo: correo, validacion:true },
+                data: { codigo: codigo },
                 dataType: 'json',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
                 success: function(response) {
                     if (response.success) {
-                        var correo = $('#correo').val();
+                        var codigo = $('#codigo').val();
                         
                     } else {
-                        $('#correo').val('');
+                        $('#codigo').val('');
                         $('#alerta').html(response.message).show();
                         setTimeout(function() {
                         $('#alerta').html('').hide();
@@ -168,7 +160,7 @@ $correo = $_SESSION['correoUser'];
 
                 },
                 error: function() {
-                    $('#alerta').html('Error al verificar el correo electrónico.').show();
+                    $('#alerta').html('Error al verificar el codigo del producto.').show();
                     setTimeout(function() {
                         $('#alerta').html('').hide();
                     }, 5000);
@@ -207,6 +199,8 @@ $correo = $_SESSION['correoUser'];
     <div class="titulo">Alta de productos</div>
     <a href="productos_lista.php" class="link botonlista">Regresar al listado</a><br><br>
 
+    <div id="mensaje" class="mensaje"></div>
+    <div id="alerta" class="alerta"></div>
     <form class='form' enctype="multipart/form-data" name="Forma01" action="productos_salva.php" method="post" id="form1">
         <div class="caja">
             <span>Nombre </span><br>
@@ -214,7 +208,7 @@ $correo = $_SESSION['correoUser'];
         </div>
         <div class="caja">
             <span>Codigo </span><br>
-            <input type="text" name="codigo" id="codigo" placeholder="Escribe el codigo" autocomplete="off"><br>
+            <input onblur="sale()" type="text" name="codigo" id="codigo" placeholder="Escribe el codigo" autocomplete="off"><br>
         </div>
         <div class="caja">
             <span>Descripcion</span><br>
@@ -239,9 +233,7 @@ $correo = $_SESSION['correoUser'];
                 Salvar
             </button>
         </div>
-        <div id="mensaje" class="mensaje"></div>
-
-        <div id="alerta" class="alerta"></div>
+        
     </form>
 
 </body>
@@ -271,7 +263,7 @@ $correo = $_SESSION['correoUser'];
                         var stock = $('#stock').val();
                         var archivoInput = document.getElementById('archivo');
 
-                        if (nombre == "" || codigo == "" || descripcion == "" || costo == 0 || stock == 0 || archivoInput.files.length === 0){
+                        if (nombre == "" || codigo == "" || descripcion == "" || costo == "" || stock == 0 || archivoInput.files.length === 0){
                         $('#mensaje').html('Faltan campos por llenar').show(); 
                         setTimeout(function() {
                             $('#mensaje').html('').hide();

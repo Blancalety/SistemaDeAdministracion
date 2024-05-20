@@ -85,30 +85,22 @@ $correo = $_SESSION['correoUser'];
             text-decoration: none;
         }
 
-        #alerta {
-            display: none;
-            color: white;
-            text-align: center;
-            padding: 3px;
-            width: 80%;
-            margin: 10px;
-            border: #4CAF50;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            font-size: .7em;
-        }
-
+        #alerta,
         #mensaje {
+            position: absolute;
+            left: 55rem;
+            top: 119px; 
+
             display: none;
             color: white;
             text-align: center;
             padding: 3px;
-            width: 80%;
-            margin: 10px;
+            width: 30%;
+            /* margin: 10px auto; <-Centra el elemento horizontalmente, funciona sin el absolute */
             border: #4CAF50;
             border-radius: 5px;
             background-color: #4CAF50;
-            font-size: .7em;
+            font-size: 15px;
         }
 
         .rol {
@@ -207,7 +199,9 @@ $correo = $_SESSION['correoUser'];
 
     <div class="titulo">Alta de empleados</div>
     <a href="empleados_lista.php" class="link botonlista">Regresar al listado</a><br><br>
-
+    
+    <div id="mensaje" class="mensaje"></div>
+    <div id="alerta" class="alerta"></div>
     <form class='form' enctype="multipart/form-data" name="Forma01" action="empleados_salva.php" method="post" id="form1">
         <div class="caja">
             <span>Nombre </span><br>
@@ -245,9 +239,7 @@ $correo = $_SESSION['correoUser'];
                 Salvar
             </button>
         </div>
-        <div id="mensaje" class="mensaje"></div>
-
-        <div id="alerta" class="alerta"></div>
+        
     </form>
 
 </body>

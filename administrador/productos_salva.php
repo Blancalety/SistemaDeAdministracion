@@ -23,7 +23,7 @@ if (isset($_POST['codigo'])) {
         } else {
             echo json_encode(['success' => true]);
 
-            $file_name  = $_FILES['archivo']['name'];       //nombre real del archivo                           <-------name real
+            $file_name  = $_FILES['archivo']['name'];       //nombre real del archivo                          
             $file_tmp   = $_FILES['archivo']['tmp_name'];   //nombre temporal del archivo                           
             
             $arreglo    = explode(".", $file_name);         //salva el nombre para obtener la extension, donde encuentre el punto se separara

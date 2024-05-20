@@ -149,7 +149,7 @@ $correo = $_SESSION['correoUser'];
     <a href="productos_lista.php" class="link botonlista">Regresar al listado</a><br><br>
 
     <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
-    style="width: 170px; height: 160px; "><br>
+    style="width: 260px; height: 250px; "><br>
     <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
     <div class="table">
 

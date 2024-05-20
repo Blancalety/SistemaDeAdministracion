@@ -55,7 +55,7 @@ if (isset($_POST['id'])) {
             echo json_encode(['success' => false, 'message' => 'Error al actualizar Producto.']);
         }
     } else {
-        // Si el correo electrónico no existe
+        // Si no existe
         echo json_encode(['success' => false, 'message' => 'El codigo no existe en la base de datos.']);
     }
 }

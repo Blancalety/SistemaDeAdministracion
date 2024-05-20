@@ -203,7 +203,6 @@ function botonEditar() {
             data: {id: numero_id}, // Envío de id, y otras variables
             success: function(response) {
                 if (response.success) {
-                    //console.log(response.data);// Imprimir los datos en la consola del navegador
                     $("#notification").html("Cargando edicion...").show();
                     setTimeout(function() {
                         $("#notification").html("").hide();

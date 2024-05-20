@@ -153,10 +153,7 @@ $correo = $_SESSION['correoUser'];
                 reader.readAsDataURL(input.files[0]);
             }
             else {
-                //console.log("hola");
-                //$('#previa-imagen').attr('src', 'archivos/default.png');
                 img.src = defaultFile;
-                //rounded.style.display = 'none';
             }
         }
 
@@ -166,8 +163,9 @@ $correo = $_SESSION['correoUser'];
     <a href="empleados_lista.php" class="link botonlista">Regresar al listado</a><br><br>
 
     <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
-    style="width: 170px; height: 160px; "><br>
+    style="width: 230px; height: 220px; "><br>
     <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
+
     <div class="table">
 
         <!-- Fila Header -->

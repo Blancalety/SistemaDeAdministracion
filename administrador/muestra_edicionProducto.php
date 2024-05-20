@@ -104,12 +104,16 @@ $correo = $_SESSION['correoUser'];
 
         #alerta,
         #mensaje {
+            position: absolute;
+            left: 55rem;
+            top: 119px; 
+
             display: none;
             color: white;
             text-align: center;
             padding: 3px;
             width: 30%;
-            margin: 10px auto;/* Centra el elemento horizontalmente */
+            /* margin: 10px auto; <-Centra el elemento horizontalmente, funciona sin el absolute */
             border: #4CAF50;
             border-radius: 5px;
             background-color: #4CAF50;

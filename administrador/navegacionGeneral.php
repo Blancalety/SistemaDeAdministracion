@@ -17,7 +17,7 @@
             <a href="index.php">Inicio</a>
             <a href="empleados_lista.php">Empleados</a>
             <a href="productos_lista.php">Productos</a>
-            <a href="#">Promociones</a>
+            <a href="promociones_lista.php">Promociones</a>
             <a href="#">Pedidos</a>
             <a href="bienvenido.php">Bienvenido <?php echo $nombre; ?> </a>
             <a href="cerrar_sesion.php">Cerrar Sesion</a>
