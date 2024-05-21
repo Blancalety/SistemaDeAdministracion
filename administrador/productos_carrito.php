@@ -249,7 +249,7 @@ $total = 0;
     ?>
 
     <div class='titulo'>Carrito</div>
-    <a href="productos_lista.php" class="link botonlista">Cancelar y volver</a><br><br>
+    <a href="productos_lista.php" class="link botonlista">Seguir agregando</a><br><br>
     <form class='form' action="productos_carrito_salva.php" method="post" id="form1">
         <div class="table">
 
@@ -292,8 +292,6 @@ $total = 0;
                 echo "<div class='fila'><div class='celda' colspan='6'>No hay productos en el carrito.</div></div>";
             }
             ?>
-            
-
         </div> 
 
         <br><br>

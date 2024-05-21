@@ -239,51 +239,24 @@ $total = 0;
         $costo = 0;
     }
 
-    // Obtener id_pedido
-    $sql_pedido = "SELECT * FROM pedidos WHERE id_usuario = ? AND status = 1";
+    // Obtener pedidos del usuario actual
+    $sql_pedido = "SELECT p.id, p.fecha, e.nombre
+    FROM pedidos p
+    INNER JOIN empleados e ON p.id_usuario = e.id
+    WHERE p.id_usuario = ? AND p.status = 1
+    GROUP BY p.id";
     $stmt_pedido = $con->prepare($sql_pedido);
     $stmt_pedido->bind_param("i", $id_usuario);
     $stmt_pedido->execute();
     $res_pedido = $stmt_pedido->get_result();
 
-    if ($res_pedido->num_rows > 0) {
-        $row_pedido = $res_pedido->fetch_assoc();
-        $id_pedido = $row_pedido['id'];
-        $fecha = $row_pedido['fecha'];
-        $id_usuario = $row_pedido['id_usuario'];
-
-        // Obtener información del usuario asociado al pedido
-        $sql_usuario = "SELECT nombre FROM empleados WHERE id = ?";
-        $stmt_usuario = $con->prepare($sql_usuario);
-        $stmt_usuario->bind_param("i", $id_usuario);
-        $stmt_usuario->execute();
-        $res_usuario = $stmt_usuario->get_result();
-
-        if ($res_usuario->num_rows > 0) {
-            $row_usuario = $res_usuario->fetch_assoc();
-            $nombre_usuario = $row_usuario['nombre'];
-        } else {
-            $nombre_usuario = "Usuario no encontrado"; // Manejar caso en el que no se encuentre el usuario
-        }
-
-        // Obtener id_pedido y detalles del pedido
-        $sql_pedido = "SELECT p.id, p.fecha, e.nombre, pp.id_pedido
-                        FROM pedidos p
-                        INNER JOIN empleados e ON p.id_usuario = e.id
-                        INNER JOIN pedidos_productos pp ON p.id = pp.id_pedido
-                        WHERE p.id_usuario = ? AND p.status = 1";
-        $stmt_pedido = $con->prepare($sql_pedido);
-        $stmt_pedido->bind_param("i", $id_usuario);
-        $stmt_pedido->execute();
-        $res_pedido = $stmt_pedido->get_result();
-
-    } else {
-        // Si no se encuentra el pedido
-        $id_pedido = null;
-        $fecha = null;
-        $nombre_usuario = null;
-        $res_pedidos_productos = null;
-    }
+    // } else {
+    //     // Si no se encuentra el pedido
+    //     $id_pedido = null;
+    //     $fecha = null;
+    //     $nombre_usuario = null;
+    //     $res_pedidos_productos = null;
+    // }
 
 
     ?>

@@ -27,7 +27,7 @@ $total = 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles pedidos</title>
+    <title>Pedidos detalles</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style>
@@ -107,7 +107,7 @@ $total = 0;
 
         .table {
             display: table;
-            width: 30%;
+            width: 38%;
             font-family: Arial, sans-serif;
             border: 1px solid #000;
             /* border-radius: 6px; */
@@ -180,6 +180,19 @@ $total = 0;
             font-size: 15px;
         }
 
+        .linkDetalles {
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.7), /* Primera sombra */
+                0 0 30px rgba(0, 0, 255, 0.2); /* Segunda sombra */
+            padding: 7px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
     </style>
 </head>
 
@@ -194,52 +207,34 @@ $total = 0;
     $con = conecta();
     $id_usuario = $_SESSION['idUser']; 
 
+    
+    // Obtener el id_pedido de la URL
+    $id_pedido = isset($_GET['id_pedido']) ? intval($_GET['id_pedido']) : 0;
 
-    $sql_productos = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
-    $res_productos = $con->query($sql_productos);
-    $num_productos = $res_productos->num_rows;
+    // Verificar si el id_pedido es válido y pertenece al usuario actual
+    $sql_pedido_verificacion = "SELECT id FROM pedidos WHERE id = ? AND id_usuario = ? AND status = 1";
+    $stmt_pedido_verificacion = $con->prepare($sql_pedido_verificacion);
+    $stmt_pedido_verificacion->bind_param("ii", $id_pedido, $id_usuario);
+    $stmt_pedido_verificacion->execute();
+    $res_pedido_verificacion = $stmt_pedido_verificacion->get_result();
 
-    if ($num_productos > 0) {
-        // Obtener la primera fila del resultado
-        $row_productos = $res_productos->fetch_assoc();
-        // Obtener datos producto
-        $id_producto = $row_productos['id'];
-        $costo = $row_productos['costo'];
-        $nombre = $row_productos['nombre'];
-        $descripcion = $row_productos['descripcion'];
-        $stock = $row_productos['stock'];
-        $archivo_f = $row_productos['archivo_f'];
+    if ($res_pedido_verificacion->num_rows > 0) {
+        // Consulta para obtener los detalles del pedido y los productos asociados
+        $sql_pedido_productos = "SELECT pp.id_pedido, p.fecha, pr.nombre AS nombre_producto, pr.descripcion, pp.cantidad, pr.costo, (pp.cantidad * pr.costo) AS subtotal, pr.archivo_f
+                                FROM pedidos p
+                                INNER JOIN pedidos_productos pp ON p.id = pp.id_pedido
+                                INNER JOIN productos pr ON pp.id_producto = pr.id
+                                WHERE p.id_usuario = ? AND p.status = 1 AND pp.id_pedido = ?";
+        $stmt_pedido_productos = $con->prepare($sql_pedido_productos);
+        $stmt_pedido_productos->bind_param("ii", $id_usuario, $id_pedido);
+        $stmt_pedido_productos->execute();
+        $res_pedido_productos = $stmt_pedido_productos->get_result();
+
+        $total = 0; // Inicializar el total
+
     } else {
-        // Si no se encuentra el producto, establecer el costo como 0 o cualquier valor predeterminado
-        $costo = 0;
-    }
-
-    // Obtener id_pedido
-    $sql_pedido = "SELECT * FROM pedidos WHERE id_usuario = ? AND status = 0";
-    $stmt_pedido = $con->prepare($sql_pedido);
-    $stmt_pedido->bind_param("i", $id_usuario);
-    $stmt_pedido->execute();
-    $res_pedido = $stmt_pedido->get_result();
-
-    if ($res_pedido->num_rows > 0) {
-        $row_pedido = $res_pedido->fetch_assoc();
-        $id_pedido = $row_pedido['id'];
-        $fecha = $row_pedido['fecha'];
-
-        // Consultar productos en el pedido
-        $sql_pedidos_productos = "SELECT pp.*, p.nombre, p.descripcion, p.costo, p.archivo_f 
-                                FROM pedidos_productos pp 
-                                INNER JOIN productos p ON pp.id_producto = p.id 
-                                WHERE pp.id_pedido = ?";
-        $stmt_pedidos_productos = $con->prepare($sql_pedidos_productos);
-        $stmt_pedidos_productos->bind_param("i", $id_pedido);
-        $stmt_pedidos_productos->execute();
-        $res_pedidos_productos = $stmt_pedidos_productos->get_result();
-    } else {
-        // Si no se encuentra el pedido
-        $id_pedido = null;
-        $fecha = null;
-        $res_pedidos_productos = null;
+        // Si no se encuentra el pedido o no pertenece al usuario, redirigir o mostrar un mensaje de error
+        die("Pedido no encontrado o no pertenece al usuario actual.");
     }
 
     ?>
@@ -248,8 +243,8 @@ $total = 0;
     
     ?>
 
-    <div class='titulo'>Detalles de tu compra</div>
-    <a href="pedidos_lista.php" class="link botonlista">Volver a pedidos</a><br><br>
+    <div class='titulo'>Productos de su pedido</div>
+    <a href="pedidos_lista.php" class="link botonlista">Listado de pedidos</a><br><br>
     <form class='form' action="productos_carrito_salva.php" method="post" id="form1">
         <div class="table">
 
@@ -267,20 +262,22 @@ $total = 0;
 
             <!-- Fila Contenido -->
             <?php
-            if ($res_pedidos_productos && $res_pedidos_productos->num_rows > 0) {
-                while ($row = $res_pedidos_productos->fetch_array(MYSQLI_ASSOC)) {
+            if ($res_pedido_productos && $res_pedido_productos->num_rows > 0) {
+                while ($row = $res_pedido_productos->fetch_assoc()) {
                     $archivo_f = $row['archivo_f'];
-                    $nombre = $row['nombre'];
+                    $img_src = 'archivos/' . $archivo_f;
+                    $fecha = $row['fecha'];
+                    $nombre_producto = $row['nombre_producto'];
                     $descripcion = $row['descripcion'];
                     $cantidad = $row['cantidad'];
                     $costo = $row['costo'];
-                    $subtotal = $cantidad * $costo;
-                    $total += $subtotal; 
+                    $subtotal = $row['subtotal'];
+                    $total += $subtotal;
                     ?>
                     <div class="fila">
-                        <div class="celda"><img src="<?php echo 'archivos/' . htmlspecialchars($archivo_f); ?>" alt="Producto" style="width: 100px; height: 80px;"></div>
+                        <div class="celda" style="width: 150px; height: 120px;"><img src="<?php echo htmlspecialchars($img_src); ?>" alt="<?php echo htmlspecialchars($nombre_producto); ?>" style="width: 50px; height: 50px;"></div>
                         <div class="celda"><?php echo htmlspecialchars($fecha); ?></div>
-                        <div class="celda"><?php echo htmlspecialchars($nombre); ?></div>
+                        <div class="celda"><?php echo htmlspecialchars($nombre_producto); ?></div>
                         <div class="celda"><?php echo htmlspecialchars($descripcion); ?></div>
                         <div class="celda"><?php echo htmlspecialchars($cantidad); ?></div>
                         <div class="celda"><?php echo htmlspecialchars($costo); ?></div>
@@ -289,43 +286,21 @@ $total = 0;
                     <?php
                 }
             } else {
-                echo "<div class='fila'><div class='celda' colspan='6'>No hay productos en el carrito.</div></div>";
+                echo "<div class='fila'><div class='celda' colspan='6'>No hay pedidos.</div></div>";
             }
             ?>
-            
-
         </div> 
 
         <br><br>
-            <div class="total" style="text-align: center;">Total: <?php echo htmlspecialchars($total); ?></div>
-
+        <div class="total" style="text-align: center;">Total: <?php echo htmlspecialchars($total); ?></div>
+        <br><br><br><br>
+        
     </form>
     <div id="notification" class="notification"></div>
 </body>
 </html>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-    $('#botonCesta').click(function(e) {
-        e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
 
-        // Realizar la solicitud AJAX
-        $.ajax({
-            type: 'GET',
-            url: 'productos_carrito_salva.php', // La URL del archivo PHP que contiene el código para manejar la actualización del estado del pedido
-            data: { confirmar_compra: 1 }, // Los datos que quieres enviar al servidor
-            success: function(response) {
-                // alert(response); // Muestra la respuesta del servidor en un cuadro de diálogo
-                document.getElementById('notification').innerText = response;
-                window.location.href = "productos_lista.php";
-            },
-            error: function(xhr, status, error) {
-                // Manejar errores en caso de que la solicitud AJAX falle
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
 
 </script>
 
