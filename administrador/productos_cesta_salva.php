@@ -27,6 +27,7 @@ $sql = "SELECT * FROM pedidos WHERE id_usuario = $id_usuario AND status = 0";
 $res = $con->query($sql);
 $num = $res->num_rows;
 
+
 if ($num == 0) {
     // Establecer la zona horaria de Guadalajara
     $zona_horaria = new DateTimeZone('America/Mexico_City');

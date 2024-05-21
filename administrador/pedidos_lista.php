@@ -6,56 +6,35 @@ if(!$correo = $_SESSION['correoUser']){
 }
 $nombre = $_SESSION['nombreUser'];
 $correo = $_SESSION['correoUser'];
+$id_usuario = $_SESSION['idUser'];
+
+global $total;
+$total = 0;
+
+// Verificar si hay un mensaje para mostrar
+// if(isset($_SESSION['notification'])) {
+//     echo "<div class='notification'>" . $_SESSION['notification'] . "</div>";
+//     // Una vez mostrado el mensaje, borra la variable de sesión para que no se muestre nuevamente
+//     unset($_SESSION['notification']);
+// }
+
+
 
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos lista</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .table {
-            display: table;
-            width: 80%;
-            margin-top: 25px;
-            font-family: Arial, sans-serif;
-            border: 1px solid #000;
-            border-radius: 5px;
-            margin-left: auto;  /* Ajusta el margen izquierdo a automático para centrar */
-            margin-right: auto;
-        }
+    <title>Pedidos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <style>
         body {
             background-color: #f2f2f2;
         }
 
-        .fila {
-            display: table-row;
-            background-color: lightgrey;
-        }
-
-        .celda {
-            display: table-cell;
-            border: 1px solid #000;
-            padding: 10px;
-            text-align: center;
-            border-radius: 9px;
-        }
-
-        .header {
-            font-weight: bold;
-            color: lightgrey;
-            background-color: #f2f2f2;
-        }
-
-        .header .celda {
-            background-color: black;
-        }
-        /* mt */
         .titulo {
             font-family: 'Verdana', sans-serif;
             font-size: 1.5em;
@@ -69,9 +48,12 @@ $correo = $_SESSION['correoUser'];
             background: rgb(255, 255, 153);
             margin-left: 20rem;
         }
-
-        a {
-            text-decoration: none;
+        
+        .botonCesta {
+            background: rgb(255, 255, 153);
+            position: absolute;
+            left: 12.5%;
+            top: 20rem; 
         }
 
         .link {
@@ -87,33 +69,79 @@ $correo = $_SESSION['correoUser'];
             text-decoration: none;
         }
 
-        .designletra {
-            color:#a10684;
+        .total {
+            margin-left: auto;
+            margin-right: -2%;
+            font-size: large;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
         }
 
-        .detalles {
-            background: rgb(200, 160, 255);
-            text-decoration: none;
+        .fila {
+            display: table-row;
+            background-color: lightgrey;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.7), /* Primera sombra */
+                0 0 30px rgba(0, 0, 255, 0.2); /* Segunda sombra */
         }
 
-        .editar {
-            background: rgb(173, 216, 230);
+        .celda {
+            display:table-cell;
+            /* border: 1px solid #000; */
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle; 
+            /* border-radius: 9px; */
         }
 
-        .eliminar {
-            background: pink;
+        .header {
+            font-weight: bold;
+            color: lightgrey;
+            background-color: #f2f2f2;
         }
 
-        .detalles, .editar, .eliminar {
-            border-radius: 8px;
-            padding: 5px 10px;
-            margin: 0 5px;
-            cursor: pointer;
-            text-decoration: none;
+        .header .celda {
+            background-color: cornflowerblue;
+            color: whitesmoke;
         }
 
-        .mensaje {
-            background-color: red;
+        .table {
+            display: table;
+            width: 38%;
+            font-family: Arial, sans-serif;
+            border: 1px solid #000;
+            /* border-radius: 6px; */
+            margin-top: 1px;
+            margin-left: 31%;  /* Ajusta el margen izquierdo a automático para centrar */
+            margin-right: auto;
+        }
+
+        .rounded {
+            border-radius: 50%; /* Imagen redonda */
+            margin-top: 1px;
+            border: 2px solid black;
+            margin-left: 42%;
+        }
+
+        #archivo {
+            display: none;
+        }
+
+        .cantidad {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 70px;
+            cursor: pointer;border: none;
+            border-radius: 4px;
+        }
+
+        /* la class fila no me deja centrar la cantidad*/
+        .centrar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .notification {
@@ -134,148 +162,185 @@ $correo = $_SESSION['correoUser'];
             border-radius: 5px;
             font-family: Arial, sans-serif;
         }
-        
+
+        #mensaje {
+            position: absolute;
+            left: 55rem;
+            top: 119px; /* Ajusta según sea necesario */
+
+            display: none;
+            color: white;
+            text-align: center;
+            padding: 3px;
+            width: 30%;
+            /* margin: 10px auto;Centra el elemento horizontalmente funciona sin el absolute */
+            border: #4CAF50;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            font-size: 15px;
+        }
+
+        .linkDetalles {
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.7), /* Primera sombra */
+                0 0 30px rgba(0, 0, 255, 0.2); /* Segunda sombra */
+            padding: 7px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
     </style>
 </head>
+
 <body>
 
-<script>
-
-function botonDetalles() {
-    $(".detalles a").on("click", function(e) {
-        e.preventDefault(); // Evita el comportamiento por defecto del enlace
-        
-        var numero_id = $(this).data("id");
-
-        $.ajax({
-            url: 'productos_detalle.php', 
-            method: 'POST',
-            dataType: 'json',
-            data: { id: numero_id }, // Envío el ID del registro
-            success: function(response) {
-                //console.log(response);
-                if (response.success) {
-                    
-                    $("#notification").html("Mostrando los datos...").show();
-                    setTimeout(function() {
-                        $("#notification").html("").hide();
-                    // Redirige después de x segundos
-                    setTimeout(function() {
-                        var producto = response.producto;
-                        var url = 'muestra_detallesProducto.php?nombre=' + producto.nombre + '&id=' + producto.id + '&codigo=' + producto.codigo + 
-                        '&descripcion=' + producto.descripcion + '&costo=' + producto.costo + '&stock=' + producto.stock + '&archivo=' + producto.archivo_f;
-
-                        window.location.href = url 
-                        //window.location.href = "empleados_alta.php";
-                    }, 300);
-                }, 400);
-
-
-                } else {
-                    $("#notification").html("Error al ver detalles").show();
-                    setTimeout(function() {
-                        $("#notification").html("").hide();
-                    }, 3000);
-                }
-            },
-            error: function() {
-                $("#mensaje").html("Error al conectar").show();
-                    setTimeout(function() {
-                        $("#mensaje").html("").hide();
-                    }, 3000);
-            }
-        });
-        
-        
-    });
-}
-
-$(document).ready(function() {
-    botonDetalles();
-});
-
-</script>
-
-
     <?php
+
+    include('navegacionGeneral.php');
+
     require "funciones/conecta.php";
+
     $con = conecta();
+    $id_usuario = $_SESSION['idUser']; 
 
-    $sql = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
-    $res = $con->query($sql);
-    $num = $res->num_rows;
+    $sql_empleados = "SELECT * FROM empleados WHERE status = 1 AND eliminado = 0";
+    $res_empleados = $con->query($sql_empleados);
+    $num_empleados = $res_empleados->num_rows;
 
-    $opciones = [
-        1 => 'Ver detalle',
-        2 => 'Editar',
-        3 => 'Eliminar',
-    ];
+    if ($num_empleados > 0) {
+        while ($row_empleados = $res_empleados->fetch_assoc()) {
+            $id_empleado = $row_empleados['id'];
+            $nombre_empleado = $row_empleados['nombre'];
+        }
+    }
+            
+
+
+    $sql_productos = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
+    $res_productos = $con->query($sql_productos);
+    $num_productos = $res_productos->num_rows;
+
+    if ($num_productos > 0) {
+        // Obtener la primera fila del resultado
+        $row_productos = $res_productos->fetch_assoc();
+        // Obtener datos producto
+        $id_producto = $row_productos['id'];
+        $costo = $row_productos['costo'];
+        $nombre = $row_productos['nombre'];
+        $descripcion = $row_productos['descripcion'];
+        $stock = $row_productos['stock'];
+        $archivo_f = $row_productos['archivo_f'];
+    } else {
+        // Si no se encuentra el producto, establecer el costo como 0 o cualquier valor predeterminado
+        $costo = 0;
+    }
+
+    // Obtener id_pedido
+    $sql_pedido = "SELECT * FROM pedidos WHERE id_usuario = ? AND status = 1";
+    $stmt_pedido = $con->prepare($sql_pedido);
+    $stmt_pedido->bind_param("i", $id_usuario);
+    $stmt_pedido->execute();
+    $res_pedido = $stmt_pedido->get_result();
+
+    if ($res_pedido->num_rows > 0) {
+        $row_pedido = $res_pedido->fetch_assoc();
+        $id_pedido = $row_pedido['id'];
+        $fecha = $row_pedido['fecha'];
+        $id_usuario = $row_pedido['id_usuario'];
+
+        // Obtener información del usuario asociado al pedido
+        $sql_usuario = "SELECT nombre FROM empleados WHERE id = ?";
+        $stmt_usuario = $con->prepare($sql_usuario);
+        $stmt_usuario->bind_param("i", $id_usuario);
+        $stmt_usuario->execute();
+        $res_usuario = $stmt_usuario->get_result();
+
+        if ($res_usuario->num_rows > 0) {
+            $row_usuario = $res_usuario->fetch_assoc();
+            $nombre_usuario = $row_usuario['nombre'];
+        } else {
+            $nombre_usuario = "Usuario no encontrado"; // Manejar caso en el que no se encuentre el usuario
+        }
+
+        // Obtener id_pedido y detalles del pedido
+        $sql_pedido = "SELECT p.id, p.fecha, e.nombre, pp.id_pedido
+                        FROM pedidos p
+                        INNER JOIN empleados e ON p.id_usuario = e.id
+                        INNER JOIN pedidos_productos pp ON p.id = pp.id_pedido
+                        WHERE p.id_usuario = ? AND p.status = 1";
+        $stmt_pedido = $con->prepare($sql_pedido);
+        $stmt_pedido->bind_param("i", $id_usuario);
+        $stmt_pedido->execute();
+        $res_pedido = $stmt_pedido->get_result();
+
+    } else {
+        // Si no se encuentra el pedido
+        $id_pedido = null;
+        $fecha = null;
+        $nombre_usuario = null;
+        $res_pedidos_productos = null;
+    }
 
 
     ?>
 
 <?php
+    
+    ?>
 
-include('navegacionGeneral.php');
+    <div class='titulo'>Listado de pedidos</div>
+    <a href="productos_lista.php" class="link botonlista">Listado de productos</a><br><br>
+    <form class='form' action="productos_carrito_salva.php" method="post" id="form1">
+        <div class="table">
 
-?>
+            <!-- Fila Header -->
+            <div class="fila header">
+                <div class="celda">Id pedido</div>
+                <div class="celda">Fecha</div>
+                <div class="celda">Nombre Usuario</div>
+                <div class="celda">Detalles</div>
+            </div>
 
-    <div class='titulo'>Listado de pedidos (<?php echo $num; ?>)</div>
-    <a href="productos_alta.php" class="link botonlista">Agregar nuevo registro</a><br><br>
-    <div class="table">
-
-        <!-- Fila Header -->
-        <div class="fila header">
-            <div class="celda">Id</div>
-            <div class="celda">Codigo</div>
-            <div class="celda">Nombre</div>
-            <div class="celda">Descripcion</div>
-            <div class="celda">Costo</div>
-            <div class="celda">Stock</div>
-            <div class="celda">Opciones</div>
-        </div>
-
-        <?php
-        while ($fila = $res->fetch_array()) {
-            $id             = $fila["id"];
-            $codigo         = $fila["codigo"];
-            $nombre         = $fila["nombre"];
-            $descripcion    = $fila["descripcion"];
-            $costo          = $fila["costo"];
-            $stock          = $fila["stock"];
-            ?>
 
             <!-- Fila Contenido -->
-            <div class="fila">
-                <div class="celda"><?php echo $id; ?></div>
-                <div class="celda"><?php echo $codigo; ?></div>
-                <div class="celda"><?php echo $nombre; ?></div>
-                <div class="celda"><?php echo $descripcion; ?></div>
-                <div class="celda"><?php echo $costo; ?></div>
-                <div class="celda"><?php echo $stock; ?></div>
-                <div class="celda">
-                    <span class="detalles">
-                        <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
-                    </span>
+            <?php
+            if ($res_pedido && $res_pedido->num_rows > 0) {
+                while ($row_pedido = $res_pedido->fetch_assoc()) {
+                    $id_pedido = $row_pedido['id'];
+                    $fecha = $row_pedido['fecha'];
+                    $nombre_usuario = $row_pedido['nombre'];
+                    ?>
+                    <div class="fila">
+                        <div class="celda"><?php echo htmlspecialchars($id_pedido); ?></div>
+                        <div class="celda"><?php echo htmlspecialchars($fecha); ?></div>
+                        <div class="celda"><?php echo htmlspecialchars($nombre_usuario); ?></div>
+                        <div class="linkDetalles"><a href="pedidos_detalle.php?id_pedido=<?php echo htmlspecialchars($id_pedido); ?>">Ver Detalles</a></div>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo "<div class='fila'><div class='celda' colspan='6'>No hay pedidos.</div></div>";
+            }
+            ?>
+            
 
-                    <span class="editar">
-                        <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[2]; ?></a>
-                    </span>
+        </div> 
 
-                    <span class="eliminar">
-                        <a class='link' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
-                    </span>
-                </div>
-            </div>
-                
-        <?php
-        }
-        ?>
-    </div>
-
-<div id="notification" class="notification"></div>
-<div id="mensaje" class="mensaje"></div>
-
+        
+    </form>
+    <div id="notification" class="notification"></div>
 </body>
-
 </html>
+
+
+
+</script>
+
+
+
+
+

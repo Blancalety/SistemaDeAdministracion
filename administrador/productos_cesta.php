@@ -7,12 +7,12 @@ if(!$correo = $_SESSION['correoUser']){
 $nombre = $_SESSION['nombreUser'];
 $correo = $_SESSION['correoUser'];
 
-// Verificar si hay un mensaje para mostrar
-if(isset($_SESSION['notification'])) {
-    echo "<div class='notification'>" . $_SESSION['notification'] . "</div>";
-    // Una vez mostrado el mensaje, borra la variable de sesión para que no se muestre nuevamente
-    unset($_SESSION['notification']);
-}
+// // Verificar si hay un mensaje para mostrar
+// if(isset($_SESSION['notification'])) {
+//     echo "<div class='notification'>" . $_SESSION['notification'] . "</div>";
+//     // Una vez mostrado el mensaje, borra la variable de sesión para que no se muestre nuevamente
+//     unset($_SESSION['notification']);
+// }
 
 ?>
 
@@ -163,7 +163,7 @@ if(isset($_SESSION['notification'])) {
 
     </style>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
 </head>
 <body>
@@ -233,7 +233,7 @@ if(isset($_SESSION['notification'])) {
     <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
 
     <!-- <div id="mensaje" class="mensaje"></div> -->
-    <form class='form' enctype="multipart/form-data" name="Forma01" action="pedidos_productos_salva.php" method="post" id="form1">
+    <form class='form' enctype="multipart/form-data" name="Forma01" action="productos_cesta_salva.php" method="post" id="form1">
         <div class="table">
 
             <!-- Fila Header -->
@@ -276,7 +276,7 @@ if(isset($_SESSION['notification'])) {
             var formData = new FormData($('#form1')[0]);
             $.ajax({
                 type: "POST",
-                url: "pedidos_productos_salva.php",
+                url: "productos_cesta_salva.php",
                 data: formData,
                 processData: false, // Desactivar el procesamiento de datos
                 contentType: false, // Desactivar el tipo de contenido

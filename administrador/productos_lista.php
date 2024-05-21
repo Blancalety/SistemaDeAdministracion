@@ -9,7 +9,7 @@ $correo = $_SESSION['correoUser'];
 
 // Verificar si hay un mensaje para mostrar
 if(isset($_SESSION['notification'])) {
-    echo "<div class='notification'>" . $_SESSION['notification'] . "</div>";
+    echo $_SESSION['notification'] ;
     // Una vez mostrado el mensaje, borra la variable de sesión para que no se muestre nuevamente
     unset($_SESSION['notification']);
 }
