@@ -7,6 +7,13 @@ if(!$correo = $_SESSION['correoUser']){
 $nombre = $_SESSION['nombreUser'];
 $correo = $_SESSION['correoUser'];
 
+// Verificar si hay un mensaje para mostrar
+if(isset($_SESSION['notification'])) {
+    echo "<div class='notification'>" . $_SESSION['notification'] . "</div>";
+    // Una vez mostrado el mensaje, borra la variable de sesión para que no se muestre nuevamente
+    unset($_SESSION['notification']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +21,7 @@ $correo = $_SESSION['correoUser'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles</title>
+    <title>Carrito</title>
 
 
     <style>
@@ -35,7 +42,7 @@ $correo = $_SESSION['correoUser'];
             background: rgb(255, 255, 153);
             margin-left: 20rem;
         }
-
+        
         .botonCesta {
             background: rgb(255, 255, 153);
             position: absolute;
@@ -63,10 +70,10 @@ $correo = $_SESSION['correoUser'];
 
         .celda {
             display:table-cell;
-            border: 1px solid #000;
+            /* border: 1px solid #000; */
             padding: 10px;
             text-align: center;
-            border-radius: 9px;
+            /* border-radius: 9px; */
         }
 
         .header {
@@ -85,7 +92,7 @@ $correo = $_SESSION['correoUser'];
             width: 30%;
             font-family: Arial, sans-serif;
             border: 1px solid #000;
-            border-radius: 6px;
+            /* border-radius: 6px; */
             margin-top: 1px;
             margin-left: 36%;  /* Ajusta el margen izquierdo a automático para centrar */
             margin-right: auto;
@@ -95,14 +102,68 @@ $correo = $_SESSION['correoUser'];
             border-radius: 50%; /* Imagen redonda */
             margin-top: 1px;
             border: 2px solid black;
-            margin-left: 44%;
+            margin-left: 42%;
         }
 
         #archivo {
             display: none;
         }
 
+        .cantidad {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 70px;
+            cursor: pointer;border: none;
+            border-radius: 4px;
+        }
+
+        /* la class fila no me deja centrar la cantidad*/
+        .centrar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .notification {
+            background-color: #4CAF50;
+        }
+
+        .notification, .mensaje {
+            display: none;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1;
+            width: 250px;
+            margin: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+        }
+
+        #mensaje {
+            position: absolute;
+            left: 55rem;
+            top: 119px; /* Ajusta según sea necesario */
+
+            display: none;
+            color: white;
+            text-align: center;
+            padding: 3px;
+            width: 30%;
+            /* margin: 10px auto;Centra el elemento horizontalmente funciona sin el absolute */
+            border: #4CAF50;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            font-size: 15px;
+        }
+
     </style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
@@ -117,17 +178,12 @@ $correo = $_SESSION['correoUser'];
 
     // Obtener los detalles del empleado de los parámetros GET
     $nombre         = $_GET['nombre'];
+    $id_producto    = $_GET['id'];
     $codigo         = $_GET['codigo'];
     $descripcion    = $_GET['descripcion'];
     $costo          = $_GET['costo'];
     $stock          = $_GET['stock'];
-
-    $archivo = $_GET['archivo'];
-
-    // Redirigir a la segunda URL con los mismos datos
-    // $url = "productos_cesta.php?nombre=$nombre&id=$id&codigo=$codigo&descripcion=$descripcion&costo=$costo&stock=$stock&archivo=$archivo";
-    // header("Location: $url");
-    // exit();
+    $archivo        = $_GET['archivo'];
     
     ?>
 
@@ -148,45 +204,94 @@ $correo = $_SESSION['correoUser'];
                 reader.readAsDataURL(input.files[0]);
             }
             else {
-                //console.log("hola");
-                //$('#previa-imagen').attr('src', 'archivos/default.png');
                 img.src = defaultFile;
-                //rounded.style.display = 'none';
             }
         }
 
+        // var id_producto = <?php echo $id_producto; ?>;
+        // console.log("id producto:", id_producto); 
+        function calcularTotal() {
+            const cantidad = document.getElementById('cantidad').value;
+            const costo = parseFloat(document.getElementById('costo').innerText); // Convertir a número
+            const total = cantidad * costo;
+            document.getElementById('total').innerText = total.toFixed(2);
+        }
+
+        // Inicializa el total cuando la página se carga
+        window.onload = function() {
+            // console.log("La página se ha cargado.");
+            // calcularTotal();
+        };
+
     </script>
 
-    <div class='titulo'>Detalles del producto</div>
-    <a href="productos_lista.php" class="link botonlista">Regresar al listado</a><br><br>
+    <div class='titulo'>Cesta</div>
+    <a href="productos_lista.php" class="link botonlista">Cancelar y volver</a><br><br>
 
     <img id="previa-imagen" class="previa-imagen rounded" src=<?php echo 'archivos/' . $archivo  ?> alt="sin imagen"
     style="width: 260px; height: 250px; "><br>
     <input type="file" id="archivo" name="archivo" onchange="previsualizarImagen(this)" ><br><br>
-    <div class="table">
 
-        <!-- Fila Header -->
-        <div class="fila header">
-            <div class="celda">Nombre</div>
-            <div class="celda">Descripcion</div>
-            <div class="celda">Costo</div>
-            <div class="celda">Stock</div>
-        </div>
+    <!-- <div id="mensaje" class="mensaje"></div> -->
+    <form class='form' enctype="multipart/form-data" name="Forma01" action="pedidos_productos_salva.php" method="post" id="form1">
+        <div class="table">
 
-        <!-- Fila Contenido -->
-        <div class="fila">
-            <div class="celda"><?php echo $nombre ?></div>
-            <div class="celda"><?php echo $descripcion ?></div>
-            <div class="celda"><?php echo $costo ?></div>
-            <div class="celda"><?php echo $stock ?></div>
-        </div>
-    
-    </div> 
+            <!-- Fila Header -->
+            <div class="fila header">
+                <div class="celda">Cantidad</div>
+                <div class="celda">Costo</div>
+                <div class="celda">Total</div>
+            </div>
 
-    <!-- <span >
-        <a href="productos_cesta.php?nombre=$nombre&id=$id&codigo=$codigo&descripcion=$descripcion&costo=$costo&stock=$stock&archivo=$archivo" class="link botonCesta">Añadir a la cesta</a><br><br>
-    </span> -->
+            <!-- Fila Contenido -->
+            <div class="fila">
+                <input type="hidden" name="id_producto" value="<?php echo $id_producto; ?>">
+                
+                <div class="centrar">   
+                    <input onblur="calcularTotal()" onclick="calcularTotal()" type="number" class="cantidad celda" id="cantidad" name="cantidad" min="1" step="1" value="0">
+                </div>
+
+                <div class="celda" id="costo"><?php echo $costo ?></div>
+                
+                <div class="celda" id="total"></div>
+            </div>
+        
+        </div> 
+
+        <span >
+            <!-- <a href="productos_lista.php" class="link botonCesta">Confirmar</a><br><br> -->
+            <button id="btnguardar" type="submit" class="link botonCesta">Confirmar</button>
+        </span>
+    </form>
+
+    <div id="notification" class="notification"></div>
+
 </body>
 </html>
+
+<!--formulario va a salva-->
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnguardar').click(function(){
+            var formData = new FormData($('#form1')[0]);
+            $.ajax({
+                type: "POST",
+                url: "pedidos_productos_salva.php",
+                data: formData,
+                processData: false, // Desactivar el procesamiento de datos
+                contentType: false, // Desactivar el tipo de contenido
+                success:function(r){
+                        if (r == 1){
+                            alert("Fallo el server");
+                        }
+                        else{
+                                window.location.href = "productos_lista.php";
+                            }
+                    }
+            });
+            return false;
+        });
+    });
+</script>
 
 

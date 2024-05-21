@@ -1,5 +1,6 @@
 <?php
 
+
 session_start();
 if(!$correo = $_SESSION['correoUser']){
     header("Location: index.php");

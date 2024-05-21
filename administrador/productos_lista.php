@@ -7,6 +7,14 @@ if(!$correo = $_SESSION['correoUser']){
 $nombre = $_SESSION['nombreUser'];
 $correo = $_SESSION['correoUser'];
 
+// Verificar si hay un mensaje para mostrar
+if(isset($_SESSION['notification'])) {
+    echo "<div class='notification'>" . $_SESSION['notification'] . "</div>";
+    // Una vez mostrado el mensaje, borra la variable de sesión para que no se muestre nuevamente
+    unset($_SESSION['notification']);
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -96,6 +104,11 @@ $correo = $_SESSION['correoUser'];
             text-decoration: none;
         }
 
+        .carrito {
+            background: rgb(218, 100, 255);
+            text-decoration: none;
+        }
+
         .editar {
             background: rgb(173, 216, 230);
         }
@@ -104,7 +117,7 @@ $correo = $_SESSION['correoUser'];
             background: pink;
         }
 
-        .detalles, .editar, .eliminar {
+        .detalles, .editar, .eliminar, .carrito {
             border-radius: 8px;
             padding: 5px 10px;
             margin: 0 5px;
@@ -134,9 +147,23 @@ $correo = $_SESSION['correoUser'];
             border-radius: 5px;
             font-family: Arial, sans-serif;
         }
+
+        .icon-link {
+            text-decoration: none; 
+            color: black;
+        }
+
+        .centrar {
+            position: absolute;
+            left: 40rem;
+            top: 109px; /*centro el carrito*/
+        }
         
     </style>
 </head>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <body>
 
 <script>
@@ -167,6 +194,54 @@ function botonDetalles() {
 
                         window.location.href = url 
                         //window.location.href = "empleados_alta.php";
+                    }, 300);
+                }, 400);
+
+
+                } else {
+                    $("#notification").html("Error al ver detalles").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    }, 3000);
+                }
+            },
+            error: function() {
+                $("#mensaje").html("Error al conectar").show();
+                    setTimeout(function() {
+                        $("#mensaje").html("").hide();
+                    }, 3000);
+            }
+        });
+        
+        
+    });
+}
+
+function botonCarrito() {
+    $(".carrito a").on("click", function(e) {
+        e.preventDefault(); // Evita el comportamiento por defecto del enlace
+        
+        var numero_id = $(this).data("id");
+
+        $.ajax({
+            url: 'productos_detalle.php', 
+            method: 'POST',
+            dataType: 'json',
+            data: { id: numero_id }, // Envío el ID del registro
+            success: function(response) {
+                //console.log(response);
+                if (response.success) {
+                    
+                    $("#notification").html("Cesta...").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    // Redirige después de x segundos
+                    setTimeout(function() {
+                        var producto = response.producto;
+                        var url = 'productos_cesta.php?nombre=' + producto.nombre + '&id=' + producto.id + '&codigo=' + producto.codigo + 
+                        '&descripcion=' + producto.descripcion + '&costo=' + producto.costo + '&stock=' + producto.stock + '&archivo=' + producto.archivo_f;
+
+                        window.location.href = url 
                     }, 300);
                 }, 400);
 
@@ -273,6 +348,7 @@ function botonEliminar() {
 
 $(document).ready(function() {
     botonDetalles();
+    botonCarrito();
     botonEditar();
     botonEliminar();
 });
@@ -280,7 +356,7 @@ $(document).ready(function() {
 </script>
 
 
-    <?php
+<?php
     require "funciones/conecta.php";
     $con = conecta();
 
@@ -290,10 +366,10 @@ $(document).ready(function() {
 
     $opciones = [
         1 => 'Ver detalle',
-        2 => 'Editar',
-        3 => 'Eliminar',
+        2 => 'Añadir a la cesta',
+        3 => 'Editar',
+        4 => 'Eliminar',
     ];
-
 
     ?>
 
@@ -305,6 +381,17 @@ include('navegacionGeneral.php');
 
     <div class='titulo'>Lista de productos (<?php echo $num; ?>)</div>
     <a href="productos_alta.php" class="link botonlista">Agregar nuevo registro</a><br><br>
+
+    <a href="productos_carrito.php" class="centrar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M17 17h-11v-14h-2" />
+            <path d="M6 5l14 1l-1 7h-13" />
+        </svg>
+    </a>
+
     <div class="table">
 
         <!-- Fila Header -->
@@ -319,6 +406,7 @@ include('navegacionGeneral.php');
         </div>
 
         <?php
+
         while ($fila = $res->fetch_array()) {
             $id             = $fila["id"];
             $codigo         = $fila["codigo"];
@@ -326,7 +414,7 @@ include('navegacionGeneral.php');
             $descripcion    = $fila["descripcion"];
             $costo          = $fila["costo"];
             $stock          = $fila["stock"];
-            ?>
+        ?>
 
             <!-- Fila Contenido -->
             <div class="fila">
@@ -341,19 +429,23 @@ include('navegacionGeneral.php');
                         <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
                     </span>
 
-                    <span class="editar">
+                    <span class="carrito">
                         <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[2]; ?></a>
                     </span>
 
+                    <span class="editar">
+                        <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
+                    </span>
+
                     <span class="eliminar">
-                        <a class='link' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[3]; ?></a>
+                        <a class='link' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[4]; ?></a>
                     </span>
                 </div>
             </div>
                 
-        <?php
+            <?php
         }
-        ?>
+            ?>
     </div>
 
 <div id="notification" class="notification"></div>
