@@ -149,6 +149,15 @@ $correo = $_SESSION['correoUser'];
             border: 2px solid black;
             padding: 1px;
         }
+
+        .carrito {
+            background: rgb(218, 100, 255);
+            border-radius: 8px;
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
         
     </style>
 
@@ -212,9 +221,58 @@ function botonDetalles() {
     });
 }
 
+function botonCarrito() {
+    $(".carrito a").on("click", function(e) {
+        e.preventDefault(); // Evita el comportamiento por defecto del enlace
+        
+        var numero_id = $(this).data("id");
+
+        $.ajax({
+            url: 'productos_detalle.php', 
+            method: 'POST',
+            dataType: 'json',
+            data: { id: numero_id }, // Envío el ID del registro
+            success: function(response) {
+                //console.log(response);
+                if (response.success) {
+                    
+                    $("#notification").html("Cesta...").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    // Redirige después de x segundos
+                    setTimeout(function() {
+                        var producto = response.producto;
+                        var url = 'productos_cesta.php?nombre=' + producto.nombre + '&id=' + producto.id + '&codigo=' + producto.codigo + 
+                        '&descripcion=' + producto.descripcion + '&costo=' + producto.costo + '&stock=' + producto.stock + '&archivo=' + producto.archivo_f;
+
+                        window.location.href = url 
+                    }, 300);
+                }, 400);
+
+
+                } else {
+                    $("#notification").html("Error al ver detalles").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    }, 3000);
+                }
+            },
+            error: function() {
+                $("#mensaje").html("Error al conectar").show();
+                    setTimeout(function() {
+                        $("#mensaje").html("").hide();
+                    }, 3000);
+            }
+        });
+        
+        
+    });
+}
+
 
 $(document).ready(function() {
     botonDetalles();
+    botonCarrito();
 });
 
 </script>
@@ -246,6 +304,7 @@ $(document).ready(function() {
 
     $opciones = [
         1 => 'Ver detalle',
+        2 => 'Añadir a la cesta',
     ];
 
     ?>
@@ -289,6 +348,9 @@ $(document).ready(function() {
                 <div class="celda">
                     <span class="detalles">
                         <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[1]; ?></a>
+                    </span>
+                    <span class="carrito">
+                        <a class='designletra' href="#" data-id="<?php echo $id; ?>"><?php echo $opciones[2]; ?></a>
                     </span>
                 </div>
             </div>

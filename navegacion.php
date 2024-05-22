@@ -17,8 +17,8 @@
 
             <a href="inicio.php">Home</a>
             <a href="productos.php">Productos</a>
-            <a href="#">Contacto</a>
-            <a href="#">Carrito</a>
+            <a href="contactoNoaut.php">Contacto</a>
+            <!-- <a href="#">Carrito</a> -->
             <a href="login.php">Inicio de sesion</a>
             <a href="cliente_alta.php">Crear cuenta</a>
 

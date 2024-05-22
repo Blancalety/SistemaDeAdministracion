@@ -16,7 +16,7 @@
         <nav class="navegacion-principal contenedor">
             <a href="inicioAut.php">Home</a>
             <a href="bienvenido_cliente.php">Productos</a>
-            <a href="#">Contacto</a>
+            <a href="contacto.php">Contacto</a>
             <!-- <a href="productos_carritoF1.php">Carrito</a> -->
             
             <a href="productos_carritoF1.php" class="centrar">

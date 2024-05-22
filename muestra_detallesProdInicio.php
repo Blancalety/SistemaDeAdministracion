@@ -124,7 +124,7 @@ $correo = $_SESSION['correoUser'];
 
     $archivo = $_GET['archivo'];
 
-    // Redirigir a la segunda URL con los mismos datos
+    // Redirigir a la segunda URL con los mismos datos, (no sirvio)
     // $url = "productos_cesta.php?nombre=$nombre&id=$id&codigo=$codigo&descripcion=$descripcion&costo=$costo&stock=$stock&archivo=$archivo";
     // header("Location: $url");
     // exit();
@@ -155,6 +155,58 @@ $correo = $_SESSION['correoUser'];
             }
         }
 
+        function botonCarrito() {
+    $(".carrito a").on("click", function(e) {
+        e.preventDefault(); // Evita el comportamiento por defecto del enlace
+        
+        var numero_id = $(this).data("id");
+
+        $.ajax({
+            url: 'productos_detalle.php', 
+            method: 'POST',
+            dataType: 'json',
+            data: { id: numero_id }, // Envío el ID del registro
+            success: function(response) {
+                //console.log(response);
+                if (response.success) {
+                    
+                    $("#notification").html("Cesta...").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    // Redirige después de x segundos
+                    setTimeout(function() {
+                        var producto = response.producto;
+                        var url = 'productos_cesta.php?nombre=' + producto.nombre + '&id=' + producto.id + '&codigo=' + producto.codigo + 
+                        '&descripcion=' + producto.descripcion + '&costo=' + producto.costo + '&stock=' + producto.stock + '&archivo=' + producto.archivo_f;
+
+                        window.location.href = url 
+                    }, 300);
+                }, 400);
+
+
+                } else {
+                    $("#notification").html("Error al ver detalles").show();
+                    setTimeout(function() {
+                        $("#notification").html("").hide();
+                    }, 3000);
+                }
+            },
+            error: function() {
+                $("#mensaje").html("Error al conectar").show();
+                    setTimeout(function() {
+                        $("#mensaje").html("").hide();
+                    }, 3000);
+            }
+        });
+        
+        
+    });
+}
+
+$(document).ready(function() {
+    botonCarrito();
+});
+
     </script>
 
     <div class='titulo'>Detalles del producto</div>
@@ -184,7 +236,7 @@ $correo = $_SESSION['correoUser'];
     </div> 
 
     <!-- <span >
-        <a href="productos_cesta.php?nombre=$nombre&id=$id&codigo=$codigo&descripcion=$descripcion&costo=$costo&stock=$stock&archivo=$archivo" class="link botonCesta">Añadir a la cesta</a><br><br>
+        <a href="productos_cesta.php?nombre=$nombre&id=$id&codigo=$codigo&descripcion=$descripcion&costo=$costo&stock=$stock&archivo=$archivo" class="carrito link botonCesta">Añadir a la cesta</a><br><br>
     </span> -->
 </body>
 </html>

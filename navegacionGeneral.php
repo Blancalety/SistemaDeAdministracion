@@ -14,9 +14,9 @@
 
     <div class="nav-bg">
         <nav class="navegacion-principal contenedor">
-            <a href="bienvenido_cliente">Home</a>
-            <a href="inicioAut">Productos</a>
-            <a href="#">Contacto</a>
+            <a href="inicioAut.php">Home</a>
+            <a href="bienvenido_cliente.php">Productos</a>
+            <a href="contacto.php">Contacto</a>
             <!-- <a href="productos_carritoF1">Carrito</a> -->
 
             <a href="productos_carritoF1.php" class="centrar">
