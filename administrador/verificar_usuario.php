@@ -1,4 +1,6 @@
 <?php
+
+// session_name('admin_session');
 session_start();
 require "funciones/conecta.php";
 $con = conecta();

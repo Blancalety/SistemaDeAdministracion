@@ -211,31 +211,16 @@ $total = 0;
     // Obtener el id_pedido de la URL
     $id_pedido = isset($_GET['id_pedido']) ? intval($_GET['id_pedido']) : 0;
 
-    // Verificar si el id_pedido es válido y pertenece al usuario actual
-    $sql_pedido_verificacion = "SELECT id FROM pedidos WHERE id = ? AND id_usuario = ? AND status = 1";
-    $stmt_pedido_verificacion = $con->prepare($sql_pedido_verificacion);
-    $stmt_pedido_verificacion->bind_param("ii", $id_pedido, $id_usuario);
-    $stmt_pedido_verificacion->execute();
-    $res_pedido_verificacion = $stmt_pedido_verificacion->get_result();
-
-    if ($res_pedido_verificacion->num_rows > 0) {
-        // Consulta para obtener los detalles del pedido y los productos asociados
-        $sql_pedido_productos = "SELECT pp.id_pedido, p.fecha, pr.nombre AS nombre_producto, pr.descripcion, pp.cantidad, pr.costo, (pp.cantidad * pr.costo) AS subtotal, pr.archivo_f
-                                FROM pedidos p
-                                INNER JOIN pedidos_productos pp ON p.id = pp.id_pedido
-                                INNER JOIN productos pr ON pp.id_producto = pr.id
-                                WHERE p.id_usuario = ? AND p.status = 1 AND pp.id_pedido = ?";
-        $stmt_pedido_productos = $con->prepare($sql_pedido_productos);
-        $stmt_pedido_productos->bind_param("ii", $id_usuario, $id_pedido);
-        $stmt_pedido_productos->execute();
-        $res_pedido_productos = $stmt_pedido_productos->get_result();
-
-        $total = 0; // Inicializar el total
-
-    } else {
-        // Si no se encuentra el pedido o no pertenece al usuario, redirigir o mostrar un mensaje de error
-        die("Pedido no encontrado o no pertenece al usuario actual.");
-    }
+    // Consulta para obtener los detalles del pedido y los productos asociados
+    $sql_pedido_productos = "SELECT pp.id_pedido, p.fecha, pr.nombre AS nombre_producto, pr.descripcion, pp.cantidad, pr.costo, (pp.cantidad * pr.costo) AS subtotal, pr.archivo_f
+                            FROM pedidos p
+                            INNER JOIN pedidos_productos pp ON p.id = pp.id_pedido
+                            INNER JOIN productos pr ON pp.id_producto = pr.id
+                            WHERE p.id = ? AND p.status = 1";
+    $stmt_pedido_productos = $con->prepare($sql_pedido_productos);
+    $stmt_pedido_productos->bind_param("i", $id_pedido);
+    $stmt_pedido_productos->execute();
+    $res_pedido_productos = $stmt_pedido_productos->get_result();
 
     ?>
 

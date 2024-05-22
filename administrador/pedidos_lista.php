@@ -205,59 +205,48 @@ $total = 0;
     require "funciones/conecta.php";
 
     $con = conecta();
-    $id_usuario = $_SESSION['idUser']; 
+    $id_usuario = $_SESSION['idUser'];//comentado
 
-    $sql_empleados = "SELECT * FROM empleados WHERE status = 1 AND eliminado = 0";
+    $sql_empleados = "SELECT * FROM cliente WHERE status = 1 AND eliminado = 0";
     $res_empleados = $con->query($sql_empleados);
     $num_empleados = $res_empleados->num_rows;
 
-    if ($num_empleados > 0) {
-        while ($row_empleados = $res_empleados->fetch_assoc()) {
-            $id_empleado = $row_empleados['id'];
-            $nombre_empleado = $row_empleados['nombre'];
-        }
+if ($num_empleados > 0) {
+    while ($row_empleados = $res_empleados->fetch_assoc()) {
+        $id_empleado = $row_empleados['id'];
+        $nombre_empleado = $row_empleados['nombre'];
     }
-            
+}
+        
 
+$sql_productos = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
+$res_productos = $con->query($sql_productos);
+$num_productos = $res_productos->num_rows;
 
-    $sql_productos = "SELECT * FROM productos WHERE status = 1 AND eliminado = 0";
-    $res_productos = $con->query($sql_productos);
-    $num_productos = $res_productos->num_rows;
+if ($num_productos > 0) {
+    // Obtener la primera fila del resultado
+    $row_productos = $res_productos->fetch_assoc();
+    // Obtener datos producto
+    $id_producto = $row_productos['id'];
+    $costo = $row_productos['costo'];
+    $nombre = $row_productos['nombre'];
+    $descripcion = $row_productos['descripcion'];
+    $stock = $row_productos['stock'];
+    $archivo_f = $row_productos['archivo_f'];
+} else {
+    // Si no se encuentra el producto, establecer el costo como 0 o cualquier valor predeterminado
+    $costo = 0;
+}
 
-    if ($num_productos > 0) {
-        // Obtener la primera fila del resultado
-        $row_productos = $res_productos->fetch_assoc();
-        // Obtener datos producto
-        $id_producto = $row_productos['id'];
-        $costo = $row_productos['costo'];
-        $nombre = $row_productos['nombre'];
-        $descripcion = $row_productos['descripcion'];
-        $stock = $row_productos['stock'];
-        $archivo_f = $row_productos['archivo_f'];
-    } else {
-        // Si no se encuentra el producto, establecer el costo como 0 o cualquier valor predeterminado
-        $costo = 0;
-    }
-
-    // Obtener pedidos del usuario actual
+// Obtener todos los pedidos con estado 1 (cerrados)
     $sql_pedido = "SELECT p.id, p.fecha, e.nombre
     FROM pedidos p
-    INNER JOIN empleados e ON p.id_usuario = e.id
-    WHERE p.id_usuario = ? AND p.status = 1
+    INNER JOIN cliente e ON p.id_usuario = e.id
+    WHERE p.status = 1
     GROUP BY p.id";
     $stmt_pedido = $con->prepare($sql_pedido);
-    $stmt_pedido->bind_param("i", $id_usuario);
     $stmt_pedido->execute();
     $res_pedido = $stmt_pedido->get_result();
-
-    // } else {
-    //     // Si no se encuentra el pedido
-    //     $id_pedido = null;
-    //     $fecha = null;
-    //     $nombre_usuario = null;
-    //     $res_pedidos_productos = null;
-    // }
-
 
     ?>
 

@@ -21,9 +21,7 @@ $correo = $_SESSION['correoUser'];
 <body>
 
     <header>
-
         <h1 class="titulo"><?php echo $nombre; ?> <span>bienvenido al sistema Star </span></h1>
-
     </header>
 
     <?php
