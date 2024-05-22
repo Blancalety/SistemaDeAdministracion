@@ -1,2 +1,10 @@
 *.txt
 imagenes/
+archivos/
+composer.json
+composer.lock
+foto/
+contacto.php
+contactoNoAut.php
+enviar.php
+enviarNoaut.php
